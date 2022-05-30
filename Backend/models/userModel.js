@@ -8,7 +8,11 @@ module.exports = (sequelize, DataTypes) => {
         },
         email: {
             type: DataTypes.STRING,
-            allowNull: false
+            unique: {
+                args: true,
+                msg: "Cette adresse email est déjà utilisé"
+            },
+            allowNull: false,                       
         },
         password: {
             type: DataTypes.STRING,
@@ -36,6 +40,5 @@ module.exports = (sequelize, DataTypes) => {
 
         }
     });
-
     return User
 }

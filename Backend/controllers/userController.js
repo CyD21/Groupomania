@@ -63,9 +63,13 @@ const login = (req, res) => {
 const getAllProfile = async (req, res) => {
   User.findAll()
     .then((user) => {
+      if (user.length === 0) {
+        const message = "Aucun utilisateur dans la base de données";
+        res.json({ message });
+      } else {
       const message = "La liste des utilisateur a bien été récupérée.";
       res.json({ message, data: user });
-    })
+    }})
     .catch((error) => {
       const message =
         "La liste des utilisateurs n'a pas pu être récupérée. Réessayez dans quelques instants.";
