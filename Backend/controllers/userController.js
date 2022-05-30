@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const jwtUtils = require("../utils/jwt");
 
 //============================================================================
-// * CREATION DU MODELE DE BASE
+// * MODELE DE BASE
 //============================================================================
 
 const User = db.users;
