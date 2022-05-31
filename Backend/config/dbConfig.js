@@ -1,9 +1,9 @@
 module.exports = {
-    HOST: 'localhost',
-    USER: 'root',
-    PASSWORD: 'root',
-    DB: 'groupomania',
-    dialect: 'mysql',
+    HOST: process.env.BD_HOST,
+    USER: process.env.BD_USER,
+    PASSWORD: process.env.BD_PWD,
+    DB: process.env.BD_NAME,
+    dialect: process.env.BD_DIALECT,
 
     pool: {
         max: 5, //the maximum number of connections in the pool

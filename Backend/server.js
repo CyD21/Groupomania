@@ -1,21 +1,25 @@
 const express = require("express");
+const helmet = require("helmet");
 const cors = require("cors");
 const morgan = require("morgan");
+const dotenv = require("dotenv");
 
 const app = express();
+
+dotenv.config();
 
 var corOptions = {
     original: "https://localhost:8081",
 }
 
 
-// Add middleware to the server
-
+// Importation des middlewares serveur
+app.use(helmet())
 app.use(cors(corOptions))
-
 app.use(express.json())
-
 app.use(express.urlencoded({ extended: true }))
+
+
 
 // Importation des outils de développement
 
@@ -34,10 +38,11 @@ app.get('/', (req, res, next) => {
 
 //Portc
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.SRV_PORT || 3000
 
 // Server
 
 app.listen(PORT, () => {
-    console.log("Server listening on port " + PORT)
+    console.log(
+        `Notre application Node est démarée sur : http://localhost:${PORT}`)
 })

@@ -8,17 +8,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         email: {
             type: DataTypes.STRING,
-            unique: {
-                args: true,
-                msg: "Cette adresse email est déjà utilisé"
-            },
-            validate: {
-                isEmail:{
-                args: true,
-                msg: "Cette adresse email n'est pas valide"
-            }
-            },
-            allowNull: false,                       
+            allowNull: false                       
         },
         password: {
             type: DataTypes.STRING,
@@ -33,13 +23,13 @@ module.exports = (sequelize, DataTypes) => {
         hooks: {
             beforeCreate: async(user) => {
                 if (user.password) {
-                    const salt = await bcrypt.genSaltSync(10, 'a');
+                    const salt =  bcrypt.genSaltSync(10, 'a');
                     user.password = bcrypt.hashSync(user.password, salt);
                 }
             },
             beforeUpdate: async(user) => {
                 if (user.password) {
-                    const salt = await bcrypt.genSaltSync(10, 'a');
+                    const salt = bcrypt.genSaltSync(10, 'a');
                     user.password = bcrypt.hashSync(user.password, salt);
                 }
             },
