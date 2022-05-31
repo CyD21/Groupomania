@@ -7,31 +7,50 @@ const jwtUtils = require("../utils/jwt");
 //============================================================================
 
 const User = db.users;
-
 //============================================================================
 // * ENREGISTREMENT D'UN UTILISATEUR (POST)                           /api/add
 //============================================================================
 
 const addUser = async (req, res) => {
-  let dataUser = {
-    name: req.body.name,
-    email: req.body.email,
-    password: req.body.password,
-  };
 
-  const user = await User.create(dataUser);
-  res.status(200).send(user);
-  console.log(user);
-};
+let userName = req.body.userName
+let email = req.body.email
+let password = req.body.password
+
+if (userName == null || email == null || password == null) {
+  const message = "Tout les champs sont requis"
+  res.status(201).json({ message })
+} else {
+ let dataUser = {
+        userName: req.body.userName,
+        email: req.body.email,
+        password: req.body.password
+    }
+    User.findOne( { where:{ email : email }} )
+      .then((user) => {
+        if (user) {
+          res.status(201).json( { message : "L'adresse email existe déjà" } )
+        } else {
+          const user = User.create(dataUser)
+          const message = `L'utilisateur ${dataUser.userName} est bien enregitré`
+          res.json( { message })
+        }
+      })
+      .catch((error) => {res.status(500).json({ error })})
+      }
+}
+
 //============================================================================
 // * CONNEXION UTILISATEUR (POST)                                   /api/login
 //============================================================================
 
-const login = (req, res) => {
+const login = async (req, res) => {
   var email = req.body.email;
   var password = req.body.password;
   if (email === "" || password === "") {
-    res.status(401).json({ message: "L'adresse email est le mot de passe sont requis" });
+    res
+      .status(401)
+      .json({ message: "L'adresse email est le mot de passe sont requis" });
   } else {
     User.findOne({ where: { email: email } })
       .then((user) => {
@@ -51,7 +70,10 @@ const login = (req, res) => {
         }
       })
       .catch((err) => {
-        res.status(500).json({ message: "Impossible de connecter cette utilisateur pour le moment, réessayez dans quelques minutes" });
+        res.status(500).json({
+          message:
+            "Impossible de connecter cette utilisateur pour le moment, réessayez dans quelques minutes",
+        });
       });
   }
 };
@@ -67,9 +89,10 @@ const getAllProfile = async (req, res) => {
         const message = "Aucun utilisateur dans la base de données";
         res.json({ message });
       } else {
-      const message = "La liste des utilisateur a bien été récupérée.";
-      res.json({ message, data: user });
-    }})
+        const message = "La liste des utilisateur a bien été récupérée.";
+        res.json({ message, data: user });
+      }
+    })
     .catch((error) => {
       const message =
         "La liste des utilisateurs n'a pas pu être récupérée. Réessayez dans quelques instants.";
@@ -133,14 +156,14 @@ const deleteProfile = async (req, res) => {
   User.findByPk(Id)
     .then((user) => {
       if (user === null) {
-        const message = "L'utilisateur demandé n'existe pas. Essayez avec un autre identifiant.";
+        const message =
+          "L'utilisateur demandé n'existe pas. Essayez avec un autre identifiant.";
         return res.status(404).json({ message });
       }
       const userDeleted = user;
-      return User.destroy({ where: { id: user.id } })
-    .then((_) => {
+      return User.destroy({ where: { id: user.id } }).then((_) => {
         const message = `L'utilistateur avec l'identifiant n°${userDeleted.id} a bien été supprimé.`;
-        res.json({ message, data: user.id});
+        res.json({ message, data: user.id });
       });
     })
     .catch((error) => {

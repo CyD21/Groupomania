@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt')
 
 module.exports = (sequelize, DataTypes) => {
     const User = sequelize.define('User', {
-        name: {
+        userName: {
             type: DataTypes.STRING,
             allowNull: false
         },
@@ -11,6 +11,12 @@ module.exports = (sequelize, DataTypes) => {
             unique: {
                 args: true,
                 msg: "Cette adresse email est déjà utilisé"
+            },
+            validate: {
+                isEmail:{
+                args: true,
+                msg: "Cette adresse email n'est pas valide"
+            }
             },
             allowNull: false,                       
         },
