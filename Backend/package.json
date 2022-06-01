@@ -21,7 +21,7 @@
   "author": "Cyrille DUTOIT",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/CyD21/Groupomania.git/issues"
+    "url": "https://github.com/CyD21/Groupomania/issues"
   },
   "homepage": "https://github.com/CyD21/Groupomania.git#readme",
   "dependencies": {
@@ -38,7 +38,9 @@
     "sequelize": "^6.20.0"
   },
   "devDependencies": {
+    "eslint": "^8.16.0",
     "morgan": "^1.10.0",
-    "nodemon": "^2.0.16"
+    "nodemon": "^2.0.16",
+    "prettier": "^2.6.2"
   }
 }

@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 
-const JWT_KEY_SECRET = '$2a$10$MKnXts7ZrWE34idPrbMtLe5LmD1aBYW.afzU2VHTmwaDq674S'
+const JWT_KEY_SECRET = process.env.PRIVATE_KEY
 
 module.exports = {
     generateTokenForUser: (userData) => {

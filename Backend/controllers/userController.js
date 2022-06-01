@@ -1,6 +1,7 @@
-const db = require("../models");
-const bcrypt = require("bcrypt");
-const jwtUtils = require("../utils/jwt");
+const db = require("../models");            //Récupération du modèle user
+const bcrypt = require("bcrypt");           //Importation du module bcrypt
+const jwtUtils = require("../utils/jwt");   //Importation du module jsonwebtoken
+const { Op }  = require("sequelize")        //Récupération de l'opérateur sequelize pour les recherches
 
 //============================================================================
 // * MODELE DE BASE
@@ -84,7 +85,32 @@ const login = async (req, res) => {
 //============================================================================
 
 const getAllProfile = async (req, res) => {
-  User.findAll()
+// Fonction de recherche des utilisateur par leur nom
+// les 2 premières lettre sont requise au minimum
+// Affichage de 5 utilisateurs maximum par résultat
+    if (req.query.userName) {
+      const name = req.query.userName;
+      const limit = parseInt(req.query.limit) || 5;
+      
+      if (name.length < 2) {
+        const message = "Votre recherche doit contenir au moins les deux premiers caractères."
+        return res.status(404).json({message});
+      }
+      return User.findAndCountAll({
+        where: {
+          userName: {
+            // "name" est la propriètè de userModel
+            [Op.like]: `%${name}%`, //"name" est le critère de recherche
+          },
+        },
+        order: ["userName"],
+        limit: limit,
+      }).then(({ count, rows }) => {
+        const message = `Il y a ${count} utilisateur(s) qui correspondent au terme de recherche ${name}.`;
+        res.json({ message, data: rows });
+      });
+  } else {
+  User.findAll( {order: ["userName"]})
     .then((user) => {
       if (user.length === 0) {
         const message = "Aucun utilisateur dans la base de données";
@@ -99,6 +125,7 @@ const getAllProfile = async (req, res) => {
         "La liste des utilisateurs n'a pas pu être récupérée. Réessayez dans quelques instants.";
       res.status(500).json({ message, data: error });
     });
+}
 };
 
 //============================================================================
@@ -112,7 +139,7 @@ const userProfile = async (req, res) => {
         const message = "L'utilisateur que vous avez demandé n'existe pas";
         res.json({ message, data: user });
       } else {
-        const message = `L'utilisateur ${user.name} que vous avez demandé a bien été trouvé.`;
+        const message = `L'utilisateur ${user.userName} que vous avez demandé a bien été trouvé.`;
         res.json({ message, data: user });
       }
     })
@@ -137,7 +164,7 @@ const updateProfile = async (req, res) => {
             "L'utilisateur demandé n'existe pas. Essayez avec un autre identifiant.";
           return res.status(404).json({ message });
         }
-        const message = `L'utilisateur ${user.name} a bien été modifié.`;
+        const message = `L'utilisateur ${user.userName} a bien été modifié.`;
         res.json({ message, data: user });
       });
     })
