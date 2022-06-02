@@ -20,15 +20,22 @@ const getAllArticle = async (res, req) => {
   Article.findAll({
     order: [["id", "DESC"]],
     include: [ User, Like, { model: Comment, include: User } ],
-  });
-  const message = "La liste des articles a bien été récupérée"
-  .then((message) => res.status(200).json({ message }))
-}};
+  })
+  .then((response) => res.status(200).json(response))
+  .catch(error => res.status(400).json({ message: error.message }));
+};
 
 //============================================================================
 // * RECUPERATION D'UN ARTICLE (GET)                              /api/article
 //============================================================================
-const getOneArticle = async (res, req) => {};
+const getOneArticle = async (res, req) => {
+  Message.findOne({ 
+    where: { id: User.id },
+    include: [ User, Comment, Like]
+  })
+    .then((response) => res.status(200).json(response))
+    .catch(error => res.status(400).json({ message: error.message }));
+};
 
 //============================================================================
 // * AJOUT D'UN ARTICLE (POST)                                 /api/article/id

@@ -1,7 +1,8 @@
 const db = require("../models");            //Récupération du modèle user
-const bcrypt = require("bcrypt");           //Importation du module bcrypt
+const bcrypt = require("bcrypt");       //Importation du module bcrypt
 const jwtUtils = require("../utils/jwt");   //Importation du module jsonwebtoken
-const { Op }  = require("sequelize")        //Récupération de l'opérateur sequelize pour les recherches
+const { Op }  = require("sequelize");        //Récupération de l'opérateur sequelize pour les recherches
+const { parseAuthorization } = require("../utils/jwt");
 
 //============================================================================
 // * MODELE DE BASE
@@ -80,6 +81,11 @@ const login = async (req, res) => {
 //============================================================================
 
 const getAllProfile = async (req, res) => {
+  let headersAuth = req.headers["authorization"]
+  let userId = jwtUtils.getUserId(headersAuth)
+  if (userId < 0) {
+    res.status(404).json({"message": "Token invalid"})
+  }
 // Fonction de recherche des utilisateur par leur nom
 // les 2 premières lettre sont requise au minimum
 // Affichage de 5 utilisateurs maximum par résultat
@@ -128,6 +134,11 @@ const getAllProfile = async (req, res) => {
 //============================================================================
 
 const userProfile = async (req, res) => {
+  let headersAuth = req.headers["authorization"]
+  let userId = jwtUtils.getUserId(headersAuth)
+  if (userId < 0) {
+    res.status(404).json({"message": "Token invalid"})
+  }
   User.findByPk(req.params.id)
     .then((user) => {
       if (user === null) {
@@ -150,6 +161,11 @@ const userProfile = async (req, res) => {
 //============================================================================
 
 const updateProfile = async (req, res) => {
+  let headersAuth = req.headers["authorization"]
+  let userId = jwtUtils.getUserId(headersAuth)
+  if (userId < 0) {
+    res.status(404).json({"message": "Token invalid"})
+  }  
   const Id = req.params.id;
   User.update(req.body, { where: { id: Id } })
     .then((_) => {
@@ -176,25 +192,39 @@ const updateProfile = async (req, res) => {
 //============================================================================
 
 const deleteProfile = async (req, res) => {
-  const Id = req.params.id;
-  User.findByPk(Id)
-    .then((user) => {
-      if (user === null) {
-        const message =
-          "L'utilisateur demandé n'existe pas. Essayez avec un autre identifiant.";
-        return res.status(404).json({ message });
-      }
-      const userDeleted = user;
-      return User.destroy({ where: { id: user.id } }).then((_) => {
-        const message = `L'utilistateur avec l'identifiant n°${userDeleted.id} a bien été supprimé.`;
-        res.json({ message, data: user.id });
-      });
-    })
-    .catch((error) => {
-      const message =
-        "L'utilisateur n'a pas pu être supprimé. Réessayez dans quelques instants.";
-      res.status(500).json({ message, data: error });
-    });
+  let headersAuth = req.headers["authorization"]
+  let userId = jwtUtils.getUserId(headersAuth)
+  if (userId < 0) {
+    res.status(404).json({"message": "Token invalid"})
+  }
+  User.findByPk(userId).then((user) => {
+    if (user.isAdmin === "admin") {
+      const Id = req.params.id;
+      User.findByPk(Id)
+        .then((user) => {
+          if (user === null) {
+            const message =
+              "L'utilisateur demandé n'existe pas. Essayez avec un autre identifiant.";
+            return res.status(404).json({ message });
+          }
+          const userDeleted = user;
+          return User.destroy({ where: { id: user.id } }).then((_) => {
+            const message = `L'utilistateur avec l'identifiant n°${userDeleted.id} a bien été supprimé.`;
+            res.json({ message, data: user.id });
+          });
+        })
+        .catch((error) => {
+          const message =
+            "L'utilisateur n'a pas pu être supprimé. Réessayez dans quelques instants.";
+          res.status(500).json({ message, data: error });
+        });
+    }else{
+      res.status(400).json({ "message" : "Vous n'avez pas l'autorisation." });
+    }
+  })
+  .catch((error) => {
+    res.status(500).json({ message : error })
+  })
 };
 
 //============================================================================

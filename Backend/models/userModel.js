@@ -14,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
+        avatar: {
+            type: DataTypes.STRING,
+            defaultValue: "https://"
+        },
         isAdmin: {
             type: DataTypes.ENUM("admin", "moderator", "user"),
             defaultValue: "user"
