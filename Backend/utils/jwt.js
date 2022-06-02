@@ -1,7 +1,7 @@
 
 const jwt = require('jsonwebtoken')
 
-const JWT_KEY_SECRET = "0000000000"
+const JWT_KEY_SECRET = process.env.PRIVATE_KEY;
 
 module.exports = {
     parseAuthorization: (authorization) => {
