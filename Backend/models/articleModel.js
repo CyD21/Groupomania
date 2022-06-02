@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const Post = sequelize.define('Post', {
+    const Article = sequelize.define('article', {
         description: {
             type: DataTypes.TEXT,
             allowNull: false
@@ -14,5 +14,5 @@ module.exports = (sequelize, DataTypes) => {
 
     });
 
-    return Post
+    return Article
 }

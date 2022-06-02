@@ -33,7 +33,7 @@ db.Sequelize = Sequelize
 db.sequelize = sequelize
 
 db.users = require('./userModel.js')(sequelize, DataTypes)
-db.posts = require('./postModel.js')(sequelize, DataTypes)
+db.posts = require('./ArticleModel.js')(sequelize, DataTypes)
 db.comments = require('./commentModel.js')(sequelize, DataTypes)
 db.likes = require('./likeModel.js')(sequelize, DataTypes)
 

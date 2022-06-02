@@ -14,21 +14,16 @@ const User = db.users;
 //============================================================================
 
 const addUser = async (req, res) => {
-
-let userName = req.body.userName
-let email = req.body.email
-let password = req.body.password
-
-if (userName == null || email == null || password == null) {
+  let dataUser = {
+         userName: req.body.userName,
+         email: req.body.email,
+         password: req.body.password
+     }
+if (dataUser.userName == null || dataUser.email == null || dataUser.password == null) {
   const message = "Tout les champs sont requis"
   res.status(201).json({ message })
 } else {
- let dataUser = {
-        userName: req.body.userName,
-        email: req.body.email,
-        password: req.body.password
-    }
-    User.findOne( { where:{ email : email }} )
+    User.findOne( { where:{ email : dataUser.email }} )
       .then((user) => {
         if (user) {
           res.status(201).json( { message : "L'adresse email existe déjà" } )
@@ -158,7 +153,8 @@ const updateProfile = async (req, res) => {
   const Id = req.params.id;
   User.update(req.body, { where: { id: Id } })
     .then((_) => {
-      User.findByPk(Id).then((user) => {
+      User.findByPk(Id)
+      .then((user) => {
         if (user === null) {
           const message =
             "L'utilisateur demandé n'existe pas. Essayez avec un autre identifiant.";
