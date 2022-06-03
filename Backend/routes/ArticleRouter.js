@@ -1,6 +1,11 @@
 const articleController = require("../controllers/articleController");
+const ctrlToken = require("../middlewares/ctrlToken");
 const multer = require("multer");
 const path = require("path");
+
+//*Importation du router express
+//===============================
+const router = require("express").Router();
 
 //* CONFIGURATION MULTER
 //===============================
@@ -26,23 +31,21 @@ const upload = multer({
       cb(null, true);
     } else {
       cb(null, false);
-      return cb(new Error("Seul les fichiers .png, .jpg et .jpeg sont acceptés!"));
+      return cb(
+        new Error("Seul les fichiers .png, .jpg et .jpeg sont acceptés!")
+      );
     }
   },
 });
 
-//*Importation du router express
-//===============================
-const router = require("express").Router();
-
 //*GESTION DES ROUTES ARTICLES
 //===============================
 
-router.post("/createArticle/", upload.single("image"), articleController.addArticle);
-router.get("/listArticle", articleController.getAllArticles);
-router.get("/article/:id", articleController.getOneArticle);
-router.delete("/deleteArticle/:id", articleController.deleteArticle);
-router.put("/blockArticle/:id", articleController.blockedArticle);
+router.post("/createArticle/", ctrlToken, upload.single("image"), articleController.addArticle);
+router.get("/listArticle", ctrlToken, articleController.getAllArticles);
+router.get("/article/:id", ctrlToken, articleController.getOneArticle);
+router.delete("/deleteArticle/:id", ctrlToken, articleController.deleteArticle);
+router.put("/blockArticle/:id", ctrlToken, articleController.blockedArticle);
 
 //*Exportation du routeur
 //===============================

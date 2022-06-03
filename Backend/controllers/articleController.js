@@ -6,7 +6,7 @@ const fs = require('fs')
 // * MODELE DE BASE
 //============================================================================
 
-const Article = db.article
+const Article = db.articles
 const User = db.users
 
 //============================================================================
@@ -50,12 +50,7 @@ const addArticle = (req, res) => {
 //============================================================================
 
 const getAllArticles = async(req, res) => {
-    var headerAuth = req.headers['authorization'];
-    var userId = jwtUtils.getUserId(headerAuth)
-    if (userId < 0) {
-        res.status(400).json({ 'message': 'wrong token' });
-    }
-    await Article.findAll({
+    Article.findAll({
         include: [{
             model: User,
             attributes: ['name', 'isAdmin'],
@@ -63,22 +58,18 @@ const getAllArticles = async(req, res) => {
         order: [
             ['createdAt', 'DESC']
         ]
-    }).then((posts) => {
-        res.status(200).json(posts)
+    }).then((articles) => {
+        const messages = "La liste des articles a bien été trouvée !";
+        res.status(200).json(articles)
     }).catch((error) => {
-        res.status(400).json(error.message)
+        const message = "La liste des articles est vide...";
+        res.status(400).json({message})
     })
 }
 //============================================================================
 // * RECUPERATION D'UN ARTICLE (GET)                           /api/article/id
 //============================================================================
 const getOneArticle = async (req, res) => {
-  let headersAuth = req.headers["authorization"]
-  let userId = jwtUtils.getUserId(headersAuth)
-  if (userId < 0) {
-    const message = "Le token est invalide"
-    res.status(404).json({message})
-  }
   Article.findByPk(req.params.id)
     .then((article) => {
       if (article === null) {
@@ -101,11 +92,6 @@ const getOneArticle = async (req, res) => {
 //============================================================================
 
 const deleteArticle = async(req, res) => {
-    var headerAuth = req.headers['authorization'];
-    var userId = jwtUtils.getUserId(headerAuth)
-    if (userId < 0) {
-        res.status(400).json({ 'message': 'wrong token' });
-    }
     var idArticle = req.params.id;
     if (!idArticle) { return res.status(400).json({ 'message': 'Unknown post to delete' }); }
     console.log(req.params.id)
@@ -139,11 +125,6 @@ const deleteArticle = async(req, res) => {
 //============================================================================
 
 const blockedArticle = (req, res) => {
-    var headerAuth = req.headers['authorization'];
-    var userId = jwtUtils.getUserId(headerAuth)
-    if (userId < 0) {
-        res.status(400).json({ 'message': 'wrong token' });
-    }
     User.findByPk(userId)
         .then((user) => {
             if (user.isAdmin === "moderator") {

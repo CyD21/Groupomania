@@ -81,12 +81,7 @@ const login = async (req, res) => {
 //============================================================================
 
 const getAllProfile = async (req, res) => {
-  let headersAuth = req.headers["authorization"]
-  let userId = jwtUtils.getUserId(headersAuth)
-  if (userId < 0) {
-    const message = "Le token est invalide"
-    res.status(404).json({message})
-  }
+
 // Fonction de recherche des utilisateur par leur nom
 // les 2 premières lettre sont requise au minimum
 // Affichage de 5 utilisateurs maximum par résultat
@@ -135,12 +130,6 @@ const getAllProfile = async (req, res) => {
 //============================================================================
 
 const userProfile = async (req, res) => {
-  let headersAuth = req.headers["authorization"]
-  let userId = jwtUtils.getUserId(headersAuth)
-  if (userId < 0) {
-    const message = "Le token est invalide"
-    res.status(404).json({message})
-  }
   User.findByPk(req.params.id)
     .then((user) => {
       if (user === null) {
@@ -163,12 +152,6 @@ const userProfile = async (req, res) => {
 //============================================================================
 
 const updateProfile = async (req, res) => {
-  let headersAuth = req.headers["authorization"]
-  let userId = jwtUtils.getUserId(headersAuth)
-  if (userId < 0) {
-    const message = "Le token est invalide"
-    res.status(404).json({message})
-  }  
   const Id = req.params.id;
   User.update(req.body, { where: { id: Id } })
     .then((_) => {
@@ -195,13 +178,8 @@ const updateProfile = async (req, res) => {
 //============================================================================
 
 const deleteProfile = async (req, res) => {
-  let headersAuth = req.headers["authorization"]
-  let userId = jwtUtils.getUserId(headersAuth)
-  if (userId < 0) {
-    const message = "Le token est invalide"
-    res.status(404).json({message})
-  }
-  User.findByPk(userId).then((user) => {
+  const Id = req.params.id
+  User.findByPk(Id).then((user) => {
     if (user.isAdmin === "admin") {
       const Id = req.params.id;
       User.findByPk(Id)
@@ -226,9 +204,7 @@ const deleteProfile = async (req, res) => {
       res.status(400).json({ "message" : "Vous n'avez pas l'autorisation." });
     }
   })
-  .catch((error) => {
-    res.status(500).json({ message : error })
-  })
+  .catch((error) => {res.status(500).json({ error })})
 };
 
 //============================================================================
