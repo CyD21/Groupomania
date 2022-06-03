@@ -18,7 +18,6 @@ const sequelize = new Sequelize(
         }
     }
 )
-
 sequelize.authenticate()
     .then(() => {
         console.log('Connected to database')
@@ -33,7 +32,7 @@ db.Sequelize = Sequelize
 db.sequelize = sequelize
 
 db.users = require('./userModel.js')(sequelize, DataTypes)
-db.posts = require('./ArticleModel.js')(sequelize, DataTypes)
+db.articles = require('./articleModel.js')(sequelize, DataTypes)
 db.comments = require('./commentModel.js')(sequelize, DataTypes)
 db.likes = require('./likeModel.js')(sequelize, DataTypes)
 
@@ -42,7 +41,7 @@ db.likes = require('./likeModel.js')(sequelize, DataTypes)
 
 //Table posts et Table users
 
-db.users.hasMany(db.posts, { as: "posts", onDelete: "CASCADE" }); // un utilisateur a plusieurs posts
+db.users.hasMany(db.articles, { as: "article", onDelete: "CASCADE" }); // un utilisateur a plusieurs posts
 // Si on supprime un user, on supprime ses posts //
 db.posts.belongsTo(db.users);
 
@@ -55,7 +54,7 @@ db.likes.belongsTo(db.users);
 //Tables intermédiaires likes
 db.posts.hasMany(db.likes, { as: "likes", onDelete: "CASCADE" }); // Si on supprime un user, on supprime ses messages //
 //posts a plusieurs likes
-db.likes.belongsTo(db.posts);
+db.likes.belongsTo(db.articles);
 
 //Table comment et user
 db.users.hasMany(db.comments, { as: "comments", onDelete: "CASCADE" }); // Si on supprime un user, on supprime ses messages //
@@ -65,15 +64,12 @@ db.comments.belongsTo(db.users);
 // Table comment et posts
 db.posts.hasMany(db.comments, { as: "comments", onDelete: "CASCADE" }); // Si on supprime un post, on supprime ses messages //
 //un post a plusieurs commentaires
-db.comments.belongsTo(db.posts);
+db.comments.belongsTo(db.articles);
 
 
 
 db.sequelize.sync({ force: false })
     .then(() => {
-        console.log('Ok resync is done')
+        console.log('La base de données est synchronisée')
     })
-
-
-
 module.exports = db

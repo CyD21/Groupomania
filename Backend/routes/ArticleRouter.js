@@ -1,9 +1,35 @@
-const userController = require("../controllers/postRouter.js");
-//const auth = require("../auth/auth");
+const articleController = require("../controllers/articleController");
+const multer = require("multer");
+const path = require("path");
 
-//* Importation des middlewares
+//* CONFIGURATION MULTER
 //===============================
+const storage = multer.diskStorage({
+  destination: "public/images/",
+  filename: (req, file, cb) => {
+    return cb(
+      null,
+      `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`
+    );
+  },
+});
 
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 1024 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    if (
+      file.mimetype == "image/png" ||
+      file.mimetype == "image/jpg" ||
+      file.mimetype == "image/jpeg"
+    ) {
+      cb(null, true);
+    } else {
+      cb(null, false);
+      return cb(new Error("Seul les fichiers .png, .jpg et .jpeg sont acceptés!"));
+    }
+  },
+});
 
 //*Importation du router express
 //===============================
@@ -12,12 +38,12 @@ const router = require("express").Router();
 //*GESTION DES ROUTES ARTICLES
 //===============================
 
-router.get("/article", userController.getAllArticles);
-router.get("/article/:id", userController.getOneArticle);
-router.post("/article/:id", userController.createArticle);
-router.put("/article/:id", userController.updateArticle);
-router.delete("/article/:id", userController.deleteArticle);
+router.post("/createArticle/", upload.single("image"), articleController.addArticle);
+router.get("/listArticle", articleController.getAllArticles);
+router.get("/article/:id", articleController.getOneArticle);
+router.delete("/deleteArticle/:id", articleController.deleteArticle);
+router.put("/blockArticle/:id", articleController.blockedArticle);
 
-
-//Exportation du routeur
+//*Exportation du routeur
+//===============================
 module.exports = router;

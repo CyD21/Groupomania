@@ -1,8 +1,8 @@
-const db = require("../models");            //Récupération du modèle user
-const bcrypt = require("bcrypt");       //Importation du module bcrypt
-const jwtUtils = require("../utils/jwt");   //Importation du module jsonwebtoken
-const { Op }  = require("sequelize");        //Récupération de l'opérateur sequelize pour les recherches
-const { parseAuthorization } = require("../utils/jwt");
+const db = require("../models");                          //Récupération du modèle user
+const bcrypt = require("bcrypt");                         //Importation du module bcrypt
+const jwtUtils = require("../utils/jwt");                 //Importation du module jsonwebtoken
+const { Op }  = require("sequelize");                     //Récupération de l'opérateur sequelize pour les recherches
+const { parseAuthorization } = require("../utils/jwt");   //Récupération de la fonction de contrôle du token
 
 //============================================================================
 // * MODELE DE BASE
@@ -84,7 +84,8 @@ const getAllProfile = async (req, res) => {
   let headersAuth = req.headers["authorization"]
   let userId = jwtUtils.getUserId(headersAuth)
   if (userId < 0) {
-    res.status(404).json({"message": "Token invalid"})
+    const message = "Le token est invalide"
+    res.status(404).json({message})
   }
 // Fonction de recherche des utilisateur par leur nom
 // les 2 premières lettre sont requise au minimum
@@ -137,7 +138,8 @@ const userProfile = async (req, res) => {
   let headersAuth = req.headers["authorization"]
   let userId = jwtUtils.getUserId(headersAuth)
   if (userId < 0) {
-    res.status(404).json({"message": "Token invalid"})
+    const message = "Le token est invalide"
+    res.status(404).json({message})
   }
   User.findByPk(req.params.id)
     .then((user) => {
@@ -164,7 +166,8 @@ const updateProfile = async (req, res) => {
   let headersAuth = req.headers["authorization"]
   let userId = jwtUtils.getUserId(headersAuth)
   if (userId < 0) {
-    res.status(404).json({"message": "Token invalid"})
+    const message = "Le token est invalide"
+    res.status(404).json({message})
   }  
   const Id = req.params.id;
   User.update(req.body, { where: { id: Id } })
@@ -195,7 +198,8 @@ const deleteProfile = async (req, res) => {
   let headersAuth = req.headers["authorization"]
   let userId = jwtUtils.getUserId(headersAuth)
   if (userId < 0) {
-    res.status(404).json({"message": "Token invalid"})
+    const message = "Le token est invalide"
+    res.status(404).json({message})
   }
   User.findByPk(userId).then((user) => {
     if (user.isAdmin === "admin") {
