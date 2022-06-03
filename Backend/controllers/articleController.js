@@ -1,5 +1,4 @@
 const db = require('../models')
-const jwtUtils = require('../utils/jwt')
 const fs = require('fs')
 
 //============================================================================
@@ -14,31 +13,29 @@ const User = db.users
 //============================================================================
 
 const addArticle = (req, res) => {
-    var headerAuth = req.headers['authorization'];
-    var userId = jwtUtils.getUserId(headerAuth)
-    if (userId < 0) {
-        res.status(400).json({ 'message': 'wrong token' });
-    }
+    const Id = req.params.id    
     const description = req.body.description
     const image = req.file.filename
     if (description === "") {
-        res.status(404).json({ 'message': 'description is required' });
+        const message = "Le champ description est obligatoire"
+        res.status(404).json({ message });
     }
     if (description.length < 100) {
-        res.status(500).json({ 'message': 'description must be at least 100 characters' })
+        const message = "Le champ description doit être égal ou supérieur à 100 caractères"
+        res.status(500).json({ message })
     }
     if (!image) {
-        res.status(400).send({ 'message': 'Please upload a file.' })
+        const message = "Vous devez enregistrer une image !"
+        res.status(400).send({ message })
     }
-
     Article.create({
         description: description,
         image: image,
         status: 0,
-        UserId: userId,
+        UserId: Id,
     }).then((postMessage) => {
-        console.log(postMessage)
-        res.status(200).json({ 'message': 'Post created successfully' })
+        const message = "Article enregistré avec succès !"
+        res.status(200).json({ message })
     }).catch((error) => {
         res.status(400).json({ 'error': error.message })
     })
@@ -59,7 +56,6 @@ const getAllArticles = async(req, res) => {
             ['createdAt', 'DESC']
         ]
     }).then((articles) => {
-        const messages = "La liste des articles a bien été trouvée !";
         res.status(200).json(articles)
     }).catch((error) => {
         const message = "La liste des articles est vide...";
@@ -93,7 +89,9 @@ const getOneArticle = async (req, res) => {
 
 const deleteArticle = async(req, res) => {
     var idArticle = req.params.id;
-    if (!idArticle) { return res.status(400).json({ 'message': 'Unknown post to delete' }); }
+    if (!idArticle) { 
+        const message = "Ce message est inconnu, impossible de le supprimer"
+        return res.status(400).json({ message }); }
     console.log(req.params.id)
     await Article.findByPk(idArticle)
         .then((article) => {
@@ -103,9 +101,11 @@ const deleteArticle = async(req, res) => {
                     article.destroy()
                         .then(function(deletedRecord) {
                             if (deletedRecord) {
-                                res.status(200).json({ message: "Deleted successfully" });
+                                const message = "Article supprimé"
+                                res.status(200).json({ message });
                             } else {
-                                res.status(404).json({ message: "record not found" })
+                                const message = "L'article n'a pas été supprimé !"
+                                res.status(404).json({ message })
                             }
                         })
                         .catch(function(error) {
@@ -113,7 +113,8 @@ const deleteArticle = async(req, res) => {
                         });
                 })
             } else {
-                res.status(403).json({ 'message': 'Law not allowed' });
+                const message = "Cette action n'est pas autorisée !"
+                res.status(403).json({ message });
             }
         }).catch((error) => {
             res.status(500).json({ 'message': error.message });
@@ -125,19 +126,25 @@ const deleteArticle = async(req, res) => {
 //============================================================================
 
 const blockedArticle = (req, res) => {
-    User.findByPk(userId)
+    const Id = req.params.id
+    User.findByPk(Id)
         .then((user) => {
             if (user.isAdmin === "moderator") {
                 var idArticle = req.params.id
-                if (!idArticle) { return res.status(400).json({ 'message': 'Unknown post to blocked' }); }
+                if (!idArticle) {
+                    const message = "Article inconnu"
+                    return res.status(400).json({ message });
+                }
                 Article.update({ status: 1 }, { where: { id: idArticle } })
                     .then((article) => {
-                        res.status(200).json({ 'message': 'Post blocked successfully' })
+                        const message = "Article bloqué avec succès"
+                        res.status(200).json({ message })
                     }).catch((error) => {
                         res.status(404).json({ 'message': error.message })
                     })
             } else {
-                res.status("401").json({ 'message': 'Your are not allowed to block this post.' })
+                const message = "Vous ne disposez pas des droits pour bloquer cette Article"
+                res.status("401").json({ message })
             }
         }).catch((error) => {
             res.status(error.status).json({ 'message': error.message })

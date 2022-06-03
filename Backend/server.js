@@ -27,11 +27,13 @@ app.use(morgan("dev"))
 
 // routers
 
-const userRouter = require("./routes/userRouter.js")
-const articleRouter = require("./routes/articleRouter.js")
+const userRouter = require("./routes/userRouter")
+const articleRouter = require("./routes/articleRouter")
+const commentRouter = require("./routes/commentRouter")
 app
     .use("/api/user", userRouter)
     .use("/api/", articleRouter)
+    .use("/api/comment", commentRouter)
 
 //Testing API
 
