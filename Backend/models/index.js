@@ -43,7 +43,7 @@ db.likes = require('./likeModel.js')(sequelize, DataTypes)
 
 db.users.hasMany(db.articles, { as: "article", onDelete: "CASCADE" }); // un utilisateur a plusieurs posts
 // Si on supprime un user, on supprime ses posts //
-db.posts.belongsTo(db.users);
+db.articles.belongsTo(db.users);
 
 //Tables intermédiaires likes
 // un utilisateur a plusieurs likes
@@ -52,7 +52,7 @@ db.users.hasMany(db.likes, { as: "likes", onDelete: "CASCADE" }); // Si on suppr
 db.likes.belongsTo(db.users);
 
 //Tables intermédiaires likes
-db.posts.hasMany(db.likes, { as: "likes", onDelete: "CASCADE" }); // Si on supprime un user, on supprime ses messages //
+db.articles.hasMany(db.likes, { as: "likes", onDelete: "CASCADE" }); // Si on supprime un user, on supprime ses messages //
 //posts a plusieurs likes
 db.likes.belongsTo(db.articles);
 
@@ -62,7 +62,7 @@ db.users.hasMany(db.comments, { as: "comments", onDelete: "CASCADE" }); // Si on
 db.comments.belongsTo(db.users);
 
 // Table comment et posts
-db.posts.hasMany(db.comments, { as: "comments", onDelete: "CASCADE" }); // Si on supprime un post, on supprime ses messages //
+db.articles.hasMany(db.comments, { as: "comments", onDelete: "CASCADE" }); // Si on supprime un post, on supprime ses messages //
 //un post a plusieurs commentaires
 db.comments.belongsTo(db.articles);
 
