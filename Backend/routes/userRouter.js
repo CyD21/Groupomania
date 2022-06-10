@@ -1,10 +1,5 @@
 const userController = require("../controllers/userController");
-const ctrlToken = require("../middlewares/ctrlToken")
-
-//* Importation des middlewares
-//===============================
-const validEmail = require("../middlewares/validEmail")
-const validPassword = require("../middlewares/validPassword")
+const ctrlToken = require("../middlewares/ctrlToken");
 
 //*Importation du router express
 //===============================
@@ -14,16 +9,17 @@ const router = require("express").Router();
 //===============================
 
 //Route pour la création d'un utilisateur
-router.post("/add", validPassword, validEmail, userController.addUser);
+router.post("/add", userController.addUser);
 
 //Route de connexion utilisateur
-router.post("/login", validPassword, validEmail, userController.login);
+router.post("/login", userController.login);
 
 //Route de gestion des profiles utilisateurs
-router.get("/profile", ctrlToken, userController.getAllProfile);
-router.get("/profile/:id", ctrlToken, userController.userProfile);
-router.put("/profile/:id", ctrlToken, userController.updateProfile);
-router.delete("/profile/:id", ctrlToken, userController.deleteProfile);
+router.get("/admin/profile/:id", ctrlToken, userController.getAllUsers);
+router.get("/profile/:id", ctrlToken, userController.getUserProfile);
+router.put("/editProfile/:id", ctrlToken, userController.editProfile);
+router.put("/updatePwd/:id", ctrlToken, userController.updatePwd);
+router.delete("/delateProfile/:id", ctrlToken, userController.deleteProfile);
 
 
 //Exportation du routeur

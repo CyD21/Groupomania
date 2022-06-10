@@ -1,59 +1,61 @@
 const db = require('../models')
-const jwtUtils = require('../utils/jwt')
 
 //============================================================================
 // * MODELE DE BASE
 //============================================================================
 
 const Comment = db.comments
-const User = db.users
+const Post = db.posts
 
 //============================================================================
-// * CREATION D'UN COMMENTAIRE (POST)                             /api/article
+// * CREATION D'UN COMMENTAIRE (POST)               /api/createcomment/:idpost
 //============================================================================
 
 const createComment = (req, res) => {
-    const Id = req.params.id;
-  Comment.findOne({ where: { id: Id } })
-    .then(comment => {
-      Comment.create({
-        include: [{ model: User }, { model: comment }],
-        content: req.body.content,
-        UserId: Id,
-        commentId: req.params.id
+  const Id = req.params.id
+  let dataComment = {
+    comment: req.body.comment,
+    userId : Id,
+    postId : req.params.idpost
+  }
+    Comment.create(
+      dataComment
+    )      
+      .then((posts) => {
+          const message = "Commentaire créé avec succès !"
+        res.status(200).json({message, data:posts});
       })
-        .then(() => res.status(201).json({ message: 'Commentaire enregistré' }))
-        .catch(error => res.status(400).json({ message: error.message }));
-    })
-    .catch(error => { res.status(403).json({ message: error.message }) });
-
+      .catch((error) => {
+        res.status(400).json(error.message);
+      });
 }
 
-//============================================================================
-// * RECUPERATION DE L'ENSEMBLE DES ARTICLES (GET)                /api/article
-//============================================================================
-
-const getAllComments = async(req, res) => {
-    
-}
-//============================================================================
-// * RECUPERATION D'UN ARTICLE (GET)                           /api/article/id
-//============================================================================
-const updateComment = async (req, res) => {
-  
-};
 
 //============================================================================
-// * SUPPRESSION D'UN ARTICLE (DELETE)                        /api/articles/id
+// * SUPPRESSION D'UN COMMENTAIRE (DELETE)       /api/deletecomment/:idcomment
 //============================================================================
-
 const deleteComment = async(req, res) => {
+    const Idcomment = req.params.idcomment
+    const Id = req.params.id
+    Comment.findByPk(Idcomment)
+    .then((comment) => {
+      if (comment.userId == Id) {
+        comment.destroy()
+        .then((deleteRecord) => {
+          if (deleteRecord){
+            res.status(200).json({message: 'Commentaire supprimé'})
+          }
+        })
+        .catch((error) => {res.status(400).json(error.message)})
+      }
+      res.status(200).json({message : "Commentaire supprimé avec succés !"})
+    })
+    .catch((error) => {res.status(500).json(error.message)})
     
+        
 }
 
 module.exports = {
     createComment,
-    getAllComments,
-    updateComment,
     deleteComment,
 }

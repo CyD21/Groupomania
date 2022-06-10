@@ -1,6 +1,6 @@
 //Importation des packages de node
 const express = require('express');
-const commentController = require("../controllers/commentController");
+const likeController = require("../controllers/likeController");
 const ctrlToken = require("../middlewares/ctrlToken");
 
 //Création d'un routeur
@@ -8,8 +8,8 @@ const router = express.Router();
 
 
 //Création des routes
-router.post('/createcomment/:idpost', ctrlToken, commentController.createComment);
-router.delete('/deletecomment/:idcomment', ctrlToken, commentController.deleteComment);
+router.post('/createlike/:idPost', ctrlToken, likeController.createLike);
+router.delete('/deleteLike/:idLike', ctrlToken, likeController.deleteLike);
 
 //Exportation du routeur de l'utilisateur
 module.exports = router;

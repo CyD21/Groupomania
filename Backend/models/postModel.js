@@ -1,19 +1,21 @@
 module.exports = (sequelize, DataTypes) => {
-    const Article = sequelize.define('article', {
+    const Post = sequelize.define('post', {
         description: {
             type: DataTypes.TEXT,
-            allowNull: false
+            allowNull: false,
         },
         image: {
             type: DataTypes.STRING,
+            allowNull: false,
+        },
+        like: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0
         },
         status: {
             type: DataTypes.BOOLEAN,
         },
-        like: {
-            type: DataTypes.INTEGER,
-            default: 0
-        }
+
     });
-    return Article
+    return Post
 }
