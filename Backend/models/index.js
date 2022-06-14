@@ -71,7 +71,7 @@ db.comments.belongsTo(db.posts);
 
 db.sequelize.sync({ force: false })
     .then(() => {
-        console.log('Ok resync is done')
+        console.log('Base de données synchronisées')
     })
 
 
