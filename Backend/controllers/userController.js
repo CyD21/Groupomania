@@ -72,8 +72,9 @@ const login = async (req, res) => {
 
 const getAllUsers = async (req, res) => {
   const Id = req.params.id;
+  const Admin = req.params.isAdmin;
   User.findOne({ attributes: ["isAdmin"], where: { id: Id } }).then((user) => {
-    if (user.isAdmin == "admin") {
+    if (Admin == "admin") {
       User.findAll({ attributes: ["id", "name", "email", "isAdmin"] })
         .then((user) => {
           const message = "La liste des utilisateurs a bien été récupérer";
@@ -125,28 +126,26 @@ const editProfile = async (req, res) => {
   })
     .then((user) => {
       if (user) {
-        user
-          .update({
+        user.update({
             name: name,
             email: email,
-            avatar: "",
+            avatar: ""
           })
           .then((userUpdate) => {
             const message = `Le compte de ${user.email} à bien été mise à jour`;
-            res.status(200).json({ message, data: userUpdate });
+            res.status(200).json({ message, data:userUpdate });
           })
           .catch((error) => {
             const message = `Echec de la mise à jour du compte ${user.email}`;
-            res.status(400).json({ message, data: error });
-          });
+            res.status(200).send({ message, data:error });
+          })
       } else {
         res.status(404).json({ message: "Cette utilisateur n'existe pas" });
       }
     })
     .catch((error) => {
-      const message =
-        "La mise à jour de ce compte est indisponible pour le moment";
-      res.status(400).json({ message, data: error });
+      const message = "La mise à jour de ce compte est indisponible pour le moment";
+      res.status(400).json({ message, data:error });
     });
 };
 

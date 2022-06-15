@@ -17,6 +17,7 @@ const Comment = db.comments;
 const addPost = (req, res) => {
   const Id = req.params.id;
   const description = req.body.description;
+  const author = User.name
   const image = req.file.filename;
   if (description === "") {
     res.status(404).json({ message: "La description est obligatoire" });
@@ -32,6 +33,7 @@ const addPost = (req, res) => {
   Post.create({
     description: description,
     image: image,
+    name: author,
     status: 0,
     UserId: Id,
   })
@@ -45,7 +47,7 @@ const addPost = (req, res) => {
 };
 
 //============================================================================
-// * RECUPERATION DE L'ENSEMBLE DES ARTICLES (GET)                /api/article
+// * RECUPERATION DE L'ENSEMBLE DES ARTICLES (GET)          /api/post/listPost
 //============================================================================
 
 const listPosts = async (req, res) => {
@@ -53,7 +55,7 @@ const listPosts = async (req, res) => {
     include: [
       {
         model: User,
-        as: "users",
+        //as: "users",
         attributes: ["name", "isAdmin"],
       },
       {
@@ -72,7 +74,8 @@ const listPosts = async (req, res) => {
       res.status(200).json({message, data:posts});
     })
     .catch((error) => {
-      res.status(400).json(error.message);
+      const message = "Impossible de récupérer la liste des articles pour le moment"
+      res.status(400).json({message, data:error});
     });
 };
 
@@ -105,9 +108,9 @@ const removePost = async (req, res) => {
   const Id = req.params.id;
   const idPost = req.params.id;
   if (!idPost) {
-    return res.status(400).json({ message: "Unknown post to delete" });
+    return res.status(400).json({ message: "Ce post n'existe pas" });
   }
-  await Post.findByPk(idPost)
+  Post.findByPk(idPost)
     .then((post) => {
       if (post.UserId === Id) {
         fs.unlink("./public/images/" + post.image, (err) => {
@@ -116,9 +119,9 @@ const removePost = async (req, res) => {
             .destroy()
             .then(function (deletedRecord) {
               if (deletedRecord) {
-                res.status(200).json({ message: "Deleted successfully" });
+                res.status(200).json({ message: "Post supprimé avec succés" });
               } else {
-                res.status(404).json({ message: "record not found" });
+                res.status(404).json({ message: "Echec de la suppression du post" });
               }
             })
             .catch(function (error) {
@@ -126,10 +129,11 @@ const removePost = async (req, res) => {
             });
         });
       } else {
-        res.status(403).json({ message: "Law not allowed" });
+        res.status(403).json({ message: "Vous ne disposez pas des droits pour cette action" });
       }
     })
     .catch((error) => {
+      const message = "Suppression du post non disponible pour le moment"
       res.status(500).json({ message: error.message });
     });
 };

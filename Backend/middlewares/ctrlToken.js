@@ -9,6 +9,7 @@ module.exports = (req, res, next) => {
     if (userId < 0) {
       const message = "Le token est invalide"
       res.status(404).json({message})
+    } else {
+      next()
     }
-    next()  
 };
