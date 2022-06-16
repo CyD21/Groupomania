@@ -13,6 +13,7 @@ const User = db.users;
 //============================================================================
 
 const addUser = (req, res) => {
+  const name = req.body.name
   const email = req.body.email;
   const password = req.body.password;
   User.findOne({ where: { email: email } })
@@ -21,8 +22,9 @@ const addUser = (req, res) => {
         res.status(400).json({ message: "Cette adresse email existe déjà !" });
       } else {
         let dataUser = {
-          email: email,
-          password: password,
+          name,
+          email,
+          password,
         };
         const user = User.create(dataUser);
         const message = "Bonjour, Votre compte a été créer avec succés";
@@ -71,9 +73,11 @@ const login = async (req, res) => {
 //============================================================================
 
 const getAllUsers = async (req, res) => {
-  const Id = req.params.id;
+  const userToken = req.userToken
+  console.log("user"+ Id)
   const Admin = req.params.isAdmin;
-  User.findOne({ attributes: ["isAdmin"], where: { id: Id } }).then((user) => {
+  User.findOne({ attributes: ["isAdmin"], where: { id: userToken } })
+  .then((user) => {
     if (Admin == "admin") {
       User.findAll({ attributes: ["id", "name", "email", "isAdmin"] })
         .then((user) => {
@@ -96,10 +100,10 @@ const getAllUsers = async (req, res) => {
 //============================================================================
 
 const getUserProfile = async (req, res) => {
-  const Id = req.params.id;
+  const userToken = req.userToken;
   User.findOne({
     attributes: ["id", "name", "email", "avatar", "isAdmin"],
-    where: { id: Id },
+    where: { id: userToken },
   })
     .then((user) => {
       if (user) {
@@ -117,12 +121,12 @@ const getUserProfile = async (req, res) => {
 // * MISE A JOUR PROFILE UTILISATEUR (PUT)                     /api/profile/id
 //============================================================================
 const editProfile = async (req, res) => {
-  const Id = req.params.id;
+  const userToken = req.userToken;
   const name = req.body.name;
   const email = req.body.email;
   User.findOne({
     attributes: ["id", "name", "email", "avatar"],
-    where: { id: Id },
+    where: { id: userToken },
   })
     .then((user) => {
       if (user) {
@@ -154,7 +158,7 @@ const editProfile = async (req, res) => {
 //============================================================================
 
 const updatePwd = (req, res) => {
-  const Id = req.params.id;
+  const userToken = req.userToken;
   var oldPassword = req.body.oldPassword;
   var newPassword = req.body.newPassword;
   var confirmPassword = req.body.confirmPassword;
@@ -165,8 +169,8 @@ const updatePwd = (req, res) => {
   if (newPassword !== confirmPassword) {
     res.status(401).json({ message: "Echec de confirmation du mot de passe"})
   }
-  if (confirmPassword == newPassword && oldPassword !== confirmPassword) {
-    User.findOne({ where: { id: Id } })
+  if (oldPassword !== newPassword) {
+    User.findOne({ where: { id: userToken } })
     .then((user) => {
       bcrypt.compare(oldPassword, user.password, (err, resEncryp) => {
         if (resEncryp) {
@@ -198,12 +202,12 @@ const updatePwd = (req, res) => {
 //============================================================================
 
 const deleteProfile = async (req, res) => {
-  const Id = req.params.id;
-  User.findByPk(Id)
+  const userToken = req.userToken;
+  User.findByPk(userToken)
     .then((user) => {
       if (user.isAdmin === "admin") {
         const Id = req.params.id;
-        User.findByPk(Id)
+        User.findByPk(userToken)
           .then((user) => {
             if (user === null) {
               const message =

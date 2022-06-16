@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         status: {
             type: DataTypes.BOOLEAN,
+            default: 0
         },
 
     });

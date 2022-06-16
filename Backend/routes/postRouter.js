@@ -10,10 +10,10 @@ const router = require("express").Router();
 //*GESTION DES ROUTES ARTICLES
 //===============================
 
-router.post("/createPost/:id", ctrlToken, multer, articleController.addPost);
+router.post("/createPost", ctrlToken, multer, articleController.addPost);
 router.get("/listPosts", ctrlToken, articleController.listPosts);
-router.delete("/deletePost/:id", ctrlToken, articleController.removePost);
-router.put("/blockPost/:id", ctrlToken, articleController.blockedPost);
+router.delete("/deletePost", ctrlToken, articleController.removePost);
+router.put("/blockPost", ctrlToken, articleController.blockedPost);
 
 
 //*Exportation du routeur

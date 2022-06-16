@@ -8,7 +8,7 @@ const router = express.Router();
 
 
 //Création des routes
-router.post('/createlike/:idPost', ctrlToken, likeController.createLike);
+router.post('/createLike/:idPost', ctrlToken, likeController.createLike);
 router.delete('/deleteLike/:idLike', ctrlToken, likeController.deleteLike);
 
 //Exportation du routeur de l'utilisateur

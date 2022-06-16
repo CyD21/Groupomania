@@ -12,10 +12,11 @@ const Post = db.posts
 //============================================================================
 
 const createComment = (req, res) => {
-  const Id = req.params.id
+  const Id = req.userToken
+  console.log("userId" + Id)
   let dataComment = {
-    comment: req.body.comment,
-    userId : Id,
+    content: req.body.content,
+    UserId : Id,
     postId : req.params.idpost
   }
     Comment.create(
@@ -28,7 +29,7 @@ const createComment = (req, res) => {
       .catch((error) => {
         res.status(400).json(error.message);
       });
-}
+ }
 
 
 //============================================================================
@@ -36,10 +37,10 @@ const createComment = (req, res) => {
 //============================================================================
 const deleteComment = async(req, res) => {
     const Idcomment = req.params.idcomment
-    const Id = req.params.id
+    const userToken = req.userToken
     Comment.findByPk(Idcomment)
     .then((comment) => {
-      if (comment.userId == Id) {
+      if (comment.userId == userToken) {
         comment.destroy()
         .then((deleteRecord) => {
           if (deleteRecord){

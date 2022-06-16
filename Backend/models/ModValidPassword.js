@@ -10,4 +10,5 @@ pwdSchema
   .has().not().spaces() // Should not have spaces
   .is().not().oneOf(["Passw0rd", "Password123"]); // Blacklist these values
 
+
 module.exports = pwdSchema;

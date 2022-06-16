@@ -15,7 +15,7 @@ const Comment = db.comments;
 //============================================================================
 
 const addPost = (req, res) => {
-  const Id = req.params.id;
+  const userToken = req.userToken;
   const description = req.body.description;
   const author = User.name
   const image = req.file.filename;
@@ -35,7 +35,7 @@ const addPost = (req, res) => {
     image: image,
     name: author,
     status: 0,
-    UserId: Id,
+    UserId: userToken,
   })
     .then((postMessage) => {
       console.log(postMessage);
@@ -55,7 +55,6 @@ const listPosts = async (req, res) => {
     include: [
       {
         model: User,
-        //as: "users",
         attributes: ["name", "isAdmin"],
       },
       {
@@ -79,40 +78,40 @@ const listPosts = async (req, res) => {
     });
 };
 
-//============================================================================
-// * RECUPERATION D'UN ARTICLE (GET)                           /api/article/id
-//============================================================================
-const getOneArticle = async (req, res) => {
-  Article.findByPk(req.params.id)
-    .then((article) => {
-      if (article === null) {
-        const message = "L'article que vous avez demandé n'existe pas";
-        res.json({ message, data: article });
-      } else {
-        const message = `L'article que vous avez demandé a bien été trouvé.`;
-        res.json({ message, data: User });
-      }
-    })
-    .catch((error) => {
-      const message =
-        "L'article n'a pu être récupéré. Réessayez dans quelques instants.";
-      res.status(500).json({ message, data: error });
-    });
-};
+// //============================================================================
+// // * RECUPERATION D'UN ARTICLE (GET)                           /api/article/id
+// //============================================================================
+// const getOneArticle = async (req, res) => {
+//   Article.findByPk(req.params.id)
+//     .then((article) => {
+//       if (article === null) {
+//         const message = "L'article que vous avez demandé n'existe pas";
+//         res.json({ message, data: article });
+//       } else {
+//         const message = `L'article que vous avez demandé a bien été trouvé.`;
+//         res.json({ message, data: User });
+//       }
+//     })
+//     .catch((error) => {
+//       const message =
+//         "L'article n'a pu être récupéré. Réessayez dans quelques instants.";
+//       res.status(500).json({ message, data: error });
+//     });
+// };
 
 //============================================================================
 // * SUPPRESSION D'UN ARTICLE (DELETE)                        /api/articles/id
 //============================================================================
 
 const removePost = async (req, res) => {
-  const Id = req.params.id;
+  const userToken = req.userToken;
   const idPost = req.params.id;
   if (!idPost) {
     return res.status(400).json({ message: "Ce post n'existe pas" });
   }
   Post.findByPk(idPost)
     .then((post) => {
-      if (post.UserId === Id) {
+      if (post.UserId === userToken) {
         fs.unlink("./public/images/" + post.image, (err) => {
           if (err) res.status(500).send({ message: err });
           post
@@ -143,9 +142,9 @@ const removePost = async (req, res) => {
 //============================================================================
 
 const blockedPost = (req, res) => {
-  const Id = req.params.id;
+  const userToken = req.userToken;
   //user law
-  User.findByPk(Id)
+  User.findByPk(userToken)
     .then((user) => {
       if (user.isAdmin === "moderator") {
         var idPost = req.params.id;

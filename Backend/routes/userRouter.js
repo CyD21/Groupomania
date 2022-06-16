@@ -18,11 +18,11 @@ router.post("/add",  email, password, userController.addUser);
 router.post("/login", email, password, userController.login);
 
 //Route de gestion des profiles utilisateurs
-router.get("/admin/profile/:id", ctrlToken, userController.getAllUsers);
-router.get("/profile/:id", ctrlToken, userController.getUserProfile);
-router.put("/editProfile/:id", ctrlToken, userController.editProfile);
-router.put("/updatePwd/:id", ctrlToken, changePassword, userController.updatePwd);
-router.delete("/deleteProfile/:id", ctrlToken, userController.deleteProfile);
+router.get("/admin/profile", ctrlToken, userController.getAllUsers);
+router.get("/profile", ctrlToken, userController.getUserProfile);
+router.put("/editProfile", ctrlToken, userController.editProfile);
+router.put("/updatePwd", ctrlToken, changePassword, userController.updatePwd);
+router.delete("/deleteProfile", ctrlToken, userController.deleteProfile);
 
 
 //Exportation du routeur
