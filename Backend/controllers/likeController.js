@@ -13,25 +13,30 @@ const Post = db.posts
 
 const createLike = (req, res) => {
   const userToken = req.userToken
+  const Id = req.params.postId
   let dataLike = {
-    userId : userToken,
-    postId : req.params.idpost
+    UserId : userToken,
+    postId : Id
   }
+  if (userToken == Id) {
+    const message = "Vous avez déjà liké ce post"
+    res.status(400).json({ message })
+  } else {
     Like.create(
       dataLike
     )      
       .then((like) => {
-        LikeLenght(req.params.idpost)
+        addLike(Id)
           const message = "Like créé avec succès !"
         res.status(200).json({message, data:like});
       })
       .catch((error) => {
-        res.status(400).json(error.message);
+        message = "Echec de la création du like"
+        res.status(400).json({message, data:error});
       });
-}
-// fonction de calcul des likes
-
-const LikeLenght = (idpost) => {
+  }}
+// ===  fonction de calcul des likes après ajout =============================
+const addLike = (idpost) => {
   Post.findByPk(idpost)
   .then((post) => {
     let nbLike = post.like
@@ -40,30 +45,33 @@ const LikeLenght = (idpost) => {
     })
   })
 }
-
 //============================================================================
 // * SUPPRESSION D'UN LIKE (DELETE)                        /deleteLike/:idLike
 //============================================================================
 const deleteLike = async (req, res) => {
-    const userToken = req.userToken
-    const IdLike = req.params.idLike
-    Like.findByPk(IdLike)
-    .then((like) => {
-      if (like.userId == userToken) {
-        like.destroy()
-        .then((deleteRecord) => {
-          if (deleteRecord){
-            res.status(200).json({message: 'Like supprimé'})
-          }
-        })
-        .catch((error) => {res.status(400).json(error.message)})
+const userToken = req.userToken
+const IdLike = req.params.idLike
+Like.findByPk(IdLike)
+.then((like) => {
+  if (like.UserId == userToken) {
+    like.destroy()
+    .then((deleteRecord) => {
+      if (deleteRecord){
+        res.status(200).json({message: 'Like annulé avec succés'})
       }
-      res.status(200).json({message : "Like supprimé avec succés !"})
     })
-    .catch((error) => {res.status(500).json(error.message)})
-    
-        
-}
+    .catch((error) => {
+      const message = "Echec de l'annulation du like"
+      res.status(400).json({ message, data:error})})
+    }
+  })
+  .catch((error) => {
+    const message = "Impossible d'annuler ce like pour le moment"
+    res.status(500).json({ message, data:error })})
+  }
+  
+  // ===  fonction de calcul des likes après annulation =============================
+  
 
 module.exports = {
     createLike,

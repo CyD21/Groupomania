@@ -13,7 +13,6 @@ const Post = db.posts
 
 const createComment = (req, res) => {
   const Id = req.userToken
-  console.log("userId" + Id)
   let dataComment = {
     content: req.body.content,
     UserId : Id,
@@ -38,7 +37,7 @@ const createComment = (req, res) => {
 const deleteComment = async(req, res) => {
     const Idcomment = req.params.idcomment
     const userToken = req.userToken
-    Comment.findByPk(Idcomment)
+    Comment.findByPk(userToken)
     .then((comment) => {
       if (comment.userId == userToken) {
         comment.destroy()

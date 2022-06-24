@@ -12,8 +12,8 @@ const router = require("express").Router();
 
 router.post("/createPost", ctrlToken, multer, articleController.addPost);
 router.get("/listPosts", ctrlToken, articleController.listPosts);
-router.delete("/deletePost", ctrlToken, articleController.removePost);
-router.put("/blockPost", ctrlToken, articleController.blockedPost);
+router.delete("/deletePost/:id", ctrlToken, articleController.deletePost);
+router.put("/blockPost/:idpost", ctrlToken, articleController.blockPost);
 
 
 //*Exportation du routeur

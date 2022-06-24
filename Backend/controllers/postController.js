@@ -103,7 +103,7 @@ const listPosts = async (req, res) => {
 // * SUPPRESSION D'UN ARTICLE (DELETE)                        /api/articles/id
 //============================================================================
 
-const removePost = async (req, res) => {
+const deletePost = async (req, res) => {
   const userToken = req.userToken;
   const idPost = req.params.id;
   if (!idPost) {
@@ -141,27 +141,26 @@ const removePost = async (req, res) => {
 //* VERROUILLAGE D'UN ARTICLE
 //============================================================================
 
-const blockedPost = (req, res) => {
+const blockPost = (req, res) => {
   const userToken = req.userToken;
-  //user law
   User.findByPk(userToken)
     .then((user) => {
-      if (user.isAdmin === "moderator") {
+      if (user.isAdmin === "moderator" && user.isAdmin === "admin") {
         var idPost = req.params.id;
         if (!idPost) {
-          return res.status(400).json({ message: "Unknown post to blocked" });
+          return res.status(400).json({ message: "Ce post n'existe pas" });
         }
         Post.update({ status: 1 }, { where: { id: idPost } })
           .then((post) => {
-            res.status(200).json({ message: "Post blocked successfully" });
+            res.status(200).json({ message: "Post blocked successfullyCe post a été bloquer avec succès" });
           })
           .catch((error) => {
             res.status(404).json({ message: error.message });
           });
       } else {
         res
-          .status("401")
-          .json({ message: "Your are not allowed to block this post." });
+          .status(401)
+          .json({ message: "Vous ne disposez pas des droits nécéssaires" });
       }
     })
     .catch((error) => {
@@ -173,6 +172,6 @@ module.exports = {
   addPost,
   listPosts,
   //getOneArticle,
-  removePost,
-  blockedPost,
+  deletePost,
+  blockPost,
 };

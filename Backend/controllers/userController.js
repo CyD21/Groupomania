@@ -74,7 +74,6 @@ const login = async (req, res) => {
 
 const getAllUsers = async (req, res) => {
   const userToken = req.userToken
-  console.log("user"+ Id)
   const Admin = req.params.isAdmin;
   User.findOne({ attributes: ["isAdmin"], where: { id: userToken } })
   .then((user) => {
@@ -169,7 +168,7 @@ const updatePwd = (req, res) => {
   if (newPassword !== confirmPassword) {
     res.status(401).json({ message: "Echec de confirmation du mot de passe"})
   }
-  if (oldPassword !== newPassword) {
+  if (confirmPassword == newPassword && oldPassword !== newPassword) {
     User.findOne({ where: { id: userToken } })
     .then((user) => {
       bcrypt.compare(oldPassword, user.password, (err, resEncryp) => {
@@ -179,9 +178,9 @@ const updatePwd = (req, res) => {
             .then((userPwdEdit) => {
               res.status(200).json({ message: "Mot de passe mise à jour" });
             })
-            .catch((error) => {
-              const message = "Echec de la mise à jour du mot de passe"
-              res.status(500).json({ message, data:error }) });
+            // .catch((error) => {
+            //   const message = "Echec de la mise à jour du mot de passe"
+            //   res.status(400).json({ message, data:error }) });
             } else {
             const message = "Veuillez contrôler votre ancien mot de passe";
             res.status(401).json({ message });
@@ -228,7 +227,7 @@ const deleteProfile = async (req, res) => {
       } else {
         res
           .status(400)
-          .json({ message: "Vous n'avez pas les droits nécessaire." });
+          .json({ message: "Vous ne disposez pas des droits nécessaire." });
       }
     })
     .catch((error) => {

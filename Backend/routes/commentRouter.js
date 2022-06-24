@@ -8,8 +8,8 @@ const router = express.Router();
 
 
 //Création des routes
-router.post('/createcomment/:idpost', ctrlToken, commentController.createComment);
-router.delete('/deletecomment/:idcomment', ctrlToken, commentController.deleteComment);
+router.post('/createComment/:idpost', ctrlToken, commentController.createComment);
+router.delete('/deleteComment/:idcomment', ctrlToken, commentController.deleteComment);
 
 //Exportation du routeur de l'utilisateur
 module.exports = router;
