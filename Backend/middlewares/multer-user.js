@@ -1,11 +1,11 @@
 //==============================================================
-// *Gestion du stockage des fichiers des posts
+// *Gestion du stockage des fichiers des photos de profile
 //==============================================================
 const multer = require("multer");
 const path = require("path")
 
 const storage = multer.diskStorage({
-  destination: 'public/images/',
+  destination: 'public/profile/',
   filename: (req, file, cb) => {
       return cb(null, `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`)
   }
@@ -24,4 +24,4 @@ const upload = multer({
   }
 })
 
-module.exports = multer({ storage : storage }).single("image");
+module.exports = multer({ storage : storage }).single("profilePicture");

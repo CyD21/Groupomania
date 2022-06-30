@@ -2,5 +2,6 @@
 /Backend/.env
 /Backend/public
 
+/Frontend
 /Frontend/node_modules
 /Frontend/public

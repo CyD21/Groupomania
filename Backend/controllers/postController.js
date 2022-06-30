@@ -78,26 +78,6 @@ const listPosts = async (req, res) => {
     });
 };
 
-// //============================================================================
-// // * RECUPERATION D'UN ARTICLE (GET)                           /api/article/id
-// //============================================================================
-// const getOneArticle = async (req, res) => {
-//   Article.findByPk(req.params.id)
-//     .then((article) => {
-//       if (article === null) {
-//         const message = "L'article que vous avez demandé n'existe pas";
-//         res.json({ message, data: article });
-//       } else {
-//         const message = `L'article que vous avez demandé a bien été trouvé.`;
-//         res.json({ message, data: User });
-//       }
-//     })
-//     .catch((error) => {
-//       const message =
-//         "L'article n'a pu être récupéré. Réessayez dans quelques instants.";
-//       res.status(500).json({ message, data: error });
-//     });
-// };
 
 //============================================================================
 // * SUPPRESSION D'UN ARTICLE (DELETE)                        /api/articles/id

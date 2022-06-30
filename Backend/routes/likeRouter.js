@@ -9,7 +9,7 @@ const router = express.Router();
 
 //Création des routes
 router.post('/createLike/:postId', ctrlToken, likeController.createLike);
-router.delete('/deleteLike/:idLike', ctrlToken, likeController.deleteLike);
+router.delete('/deleteLike/:postId/:idLike', ctrlToken, likeController.deleteLike);
 
 //Exportation du routeur de l'utilisateur
 module.exports = router;

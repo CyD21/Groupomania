@@ -1,6 +1,7 @@
 const db = require("../models"); //Récupération du modèle user
 const bcrypt = require("bcrypt"); //Importation du module bcrypt
 const jwtUtils = require("../utils/jwt"); //Importation du module jsonwebtoken
+const fs = require("fs"); //
 
 //============================================================================
 // * MODELE DE BASE
@@ -78,13 +79,13 @@ const getAllUsers = async (req, res) => {
   User.findOne({ attributes: ["isAdmin"], where: { id: userToken } })
   .then((user) => {
     if (Admin == "admin") {
-      User.findAll({ attributes: ["id", "name", "email", "isAdmin"] })
+      User.findAll({ attributes: ["id", "name", "email","occupation","pictureProfile", "isAdmin"] })
         .then((user) => {
           const message = "La liste des utilisateurs a bien été récupérer";
           res.status(200).json({ message, data: user });
         })
         .catch((err) => {
-          res.status(500).json({ message: "connot fetch user" });
+          res.status(500).json({ message: "La liste des utilisateurs n'a pas été récupérer" });
         });
     } else {
       res
@@ -101,7 +102,7 @@ const getAllUsers = async (req, res) => {
 const getUserProfile = async (req, res) => {
   const userToken = req.userToken;
   User.findOne({
-    attributes: ["id", "name", "email", "avatar", "isAdmin"],
+    attributes: ["id", "name", "email", "occupation", "profilePicture", "isAdmin"],
     where: { id: userToken },
   })
     .then((user) => {
@@ -117,23 +118,27 @@ const getUserProfile = async (req, res) => {
 };
 
 //============================================================================
-// * MISE A JOUR PROFILE UTILISATEUR (PUT)                     /api/profile/id
+// * MISE A JOUR PROFILE UTILISATEUR (PUT)               /api/user/editProfile
 //============================================================================
 const editProfile = async (req, res) => {
   const userToken = req.userToken;
   const name = req.body.name;
   const email = req.body.email;
+  const occupation = req.body.occupation;
+  const profilePicture = req.file.filename;
+  console.log("Résultat de profilePicture >>>>>>>>>>>>>>>>>>>>>>> " + profilePicture);
   User.findOne({
-    attributes: ["id", "name", "email", "avatar"],
+    attributes: ["id", "name", "email", "occupation", "profilePicture"],
     where: { id: userToken },
   })
-    .then((user) => {
-      if (user) {
-        user.update({
-            name: name,
-            email: email,
-            avatar: ""
-          })
+  .then((user) => {
+    if (user) {
+      user.update({
+        name: name,
+        email: email,
+        occupation: occupation,
+        profilePicture: profilePicture
+      })
           .then((userUpdate) => {
             const message = `Le compte de ${user.email} à bien été mise à jour`;
             res.status(200).json({ message, data:userUpdate });

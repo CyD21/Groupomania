@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     const User = sequelize.define('User', {
         name: {
             type: DataTypes.STRING,
-            allowNull: true
+            allowNull: false
         },
         email: {
             type: DataTypes.STRING,
@@ -14,9 +14,14 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
-        avatar: {
+        occupation: {
             type: DataTypes.STRING,
-            defaultValue: "https://"
+            allowNull: true
+        },
+        profilePicture: {
+            type: DataTypes.STRING,
+            defaultValue: "defaultprofile.jpg",
+            allowNull: false,
         },
         isAdmin: {
             type: DataTypes.ENUM("admin", "moderator", "user"),
