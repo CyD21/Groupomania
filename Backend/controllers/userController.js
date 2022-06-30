@@ -126,7 +126,6 @@ const editProfile = async (req, res) => {
   const email = req.body.email;
   const occupation = req.body.occupation;
   const profilePicture = req.file.filename;
-  console.log("Résultat de profilePicture >>>>>>>>>>>>>>>>>>>>>>> " + profilePicture);
   User.findOne({
     attributes: ["id", "name", "email", "occupation", "profilePicture"],
     where: { id: userToken },
