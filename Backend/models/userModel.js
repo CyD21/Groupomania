@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
         profilePicture: {
             type: DataTypes.STRING,
             defaultValue: "defaultprofile.jpg",
-            allowNull: false,
+            allowNull: true,
         },
         isAdmin: {
             type: DataTypes.ENUM("admin", "moderator", "user"),

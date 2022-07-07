@@ -186,7 +186,7 @@ const updatePwd = (req, res) => {
             //   const message = "Echec de la mise à jour du mot de passe"
             //   res.status(400).json({ message, data:error }) });
             } else {
-            const message = "Veuillez contrôler votre ancien mot de passe";
+            const message = "Echec de la mise à jour du mot de passe";
             res.status(401).json({ message });
             }
       });
@@ -209,23 +209,22 @@ const deleteProfile = async (req, res) => {
   User.findByPk(userToken)
     .then((user) => {
       if (user.isAdmin === "admin") {
-        const Id = req.params.id;
         User.findByPk(userToken)
           .then((user) => {
             if (user === null) {
-              const message =
-                "L'utilisateur demandé n'existe pas. Essayez avec un autre identifiant.";
+              const message = "L'utilisateur demandé n'existe pas. Essayez avec un autre identifiant.";
               return res.status(404).json({ message });
             }
-            const userDeleted = user;
-            return User.destroy({ where: { id: user.id } }).then((_) => {
+            fs.unlink("./public/profile/" + user.profilePicture, (err) => {
+              if (err) res.status(500).send({ message: err });
+              const userDeleted = user;
+              return User.destroy({ where: { id: user.id } }).then((_) => {
               const message = `L'utilisateur avec l'identifiant n°${userDeleted.id} a bien été supprimé.`;
-              res.json({ message, data: user.id });
-            });
+              res.status(200).json({ message, data: user.id });
+            })})
           })
           .catch((error) => {
-            const message =
-              "L'utilisateur n'a pas pu être supprimé. Réessayez dans quelques instants.";
+            const message = "L'utilisateur n'a pas pu être supprimé. Réessayez dans quelques instants.";
             res.status(500).json({ message, data: error });
           });
       } else {
