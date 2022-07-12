@@ -2,7 +2,11 @@ const bcrypt = require('bcrypt')
 
 module.exports = (sequelize, DataTypes) => {
     const User = sequelize.define('User', {
-        name: {
+        firstName: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        lastName: {
             type: DataTypes.STRING,
             allowNull: false
         },
@@ -20,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         profilePicture: {
             type: DataTypes.STRING,
-            defaultValue: "defaultprofile.jpg",
+            defaultValue: "http://localhost:3000/public/profile/defaultprofile.jpg",
             allowNull: true,
         },
         isAdmin: {

@@ -6,7 +6,7 @@ const pwdSchema = require("../models/ModValidPassword"); // Importation du forma
 module.exports = (req, res, next) => {
   const newPassword = req.body.newPassword
   if (newPassword == "") {
-    const message = "Votre mot de passe et obligatoire"
+    const message = "Votre mot de passe est obligatoire"
     res.status(400).json({ message })
   }
   if (pwdSchema.validate(newPassword)) {

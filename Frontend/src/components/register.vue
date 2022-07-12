@@ -7,25 +7,28 @@
       <div>
         <form @submit.prevent="UserSubmit">
           <div class="mb-3">
+            <label for="name" class="form-label">Votre Prénom</label>
+            <input type="text" class="form-control" v-model="dataUser.firstName" id="firstName" />
+          </div>
+          <div class="mb-3">
             <label for="name" class="form-label">Votre nom</label>
-            <input type="text" class="form-control" v-model="name" id="name" />
+            <input type="text" class="form-control" v-model="dataUser.lastName" id="lastName" />
           </div>
           <div class="mb-3">
             <label for="email" class="form-label">Votre adresse email</label>
-            <input type="email" class="form-control" v-model="email" id="email" aria-describedby="emailHelp" />
-            <div id="emailHelp" class="form-text">
-              Nous ne partagerons jamais votre e-mail avec quelqu'un d'autre.
-            </div>
+            <input type="email" class="form-control" v-model="dataUser.email" id="email" aria-describedby="emailHelp" />
+            <div id="emailHelp" class="form-text">Nous ne partagerons jamais votre e-mail.</div>
           </div>
           <div class="mb-3">
             <label for="password" class="form-label">Votre mot de passe</label>
-            <input type="password" class="form-control" v-model="password" id="password" />
+            <input type="password" class="form-control" v-model="dataUser.password" id="password" />
           </div>
           <div class="text-center">
             <button type="submit" class="btn btn-thirdColor px-xl-5 text-white">
               Valider
             </button>
           </div>
+          <div v-if="error" class="alert alert-danger mt-3">{{ error }}</div>
         </form>
       </div>
     </div>
@@ -41,22 +44,33 @@ export default {
   name: "Register",
   data() {
     return {
-      name: "",
-      email: "",
-      password: "",
+      dataUser: {
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+      },
+      error: "",
     };
   },
   methods: {
     async UserSubmit() {
-      await axios.post("user/add", {
-        name: this.name,
-        email: this.email,
-        password: this.password,
-      });
-      this.$router.push('/login')
-    }
-  }
-}
+      try {
+        await axios.post("user/add", {
+          firstName: this.dataUser.emailfirstName,
+          lastName: this.dataUser.lastName,
+          email: this.dataUser.email,
+          password: this.dataUser.password,
+        });
+        this.$router.push("/login");
+      } catch (error) {
+          this.error = "Enregistrement refusé, veuillez contrôler vos données"
+      }
+
+    },
+  },
+};
 </script>
 
-<style></style>
+<style>
+</style>
