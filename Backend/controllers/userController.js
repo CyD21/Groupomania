@@ -28,7 +28,7 @@ const addUser = (req, res) => {
           password,
         };
         const user = User.create(dataUser);
-        const message = "Bonjour, Votre compte a été créer avec succés";
+        const message = `Bonjour ${name}, Votre compte a été créer avec succés`;
         res.status(200).json({ message });
       }
     })
@@ -74,7 +74,7 @@ const login = async (req, res) => {
 //============================================================================
 
 const getAllUsers = async (req, res) => {
-  const userToken = req.userToken
+  const userToken = req.userToken;
   const Admin = req.params.isAdmin;
   User.findOne({ attributes: ["isAdmin"], where: { id: userToken } })
   .then((user) => {
@@ -96,10 +96,10 @@ const getAllUsers = async (req, res) => {
 };
 
 //============================================================================
-// * RECUPERATION PROFILE UTILISATEUR (GET)                    /api/profile/id
+// * RECUPERATION PROFILE UTILISATEUR (GET)                       /api/profile
 //============================================================================
 
-const getUserProfile = async (req, res) => {
+const getUser = async (req, res) => {
   const userToken = req.userToken;
   User.findOne({
     attributes: ["id", "name", "email", "occupation", "profilePicture", "isAdmin"],
@@ -201,7 +201,7 @@ const updatePwd = (req, res) => {
 };
 
 //============================================================================
-// * SUPPRESSION D'UN PROFILE (DELETE)                   /api/deleteProfile/id
+// * SUPPRESSION D'UN PROFILE (DELETE)                      /api/deleteProfile
 //============================================================================
 
 const deleteProfile = async (req, res) => {
@@ -246,7 +246,7 @@ module.exports = {
   addUser,
   login,
   getAllUsers,
-  getUserProfile,
+  getUser,
   editProfile,
   updatePwd,
   deleteProfile,

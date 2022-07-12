@@ -1,12 +1,11 @@
-$primary: red;
-
-// body {
-//     text-decoration: none;
-//     background-image: url("../../public/images/background.jpg")
-// }
+$theme-colors: (
+    'firstColor': #fd2d01,
+    'secondColor': #ffd7d7,
+    'thirdColor': #4e5166,
+);
 
 .fade-enter-active, .fade-leave-active {
-    transition: opacity 0.5s ease;
+    transition: opacity 2s ease-in;
 }
 .fade-enter-from, .fade-leave-to {
     opacity: 0;

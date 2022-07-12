@@ -3,7 +3,7 @@ import { RouterLink, RouterView } from "vue-router";
 </script>
 
 <template>
-  <RouterView />
+    <RouterView />
 </template>
 <style lang="css">
 @import "../src/assets/styles/styles.css";

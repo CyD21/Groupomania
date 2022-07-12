@@ -20,7 +20,7 @@ router.post("/login", email, password, userController.login);
 
 //Route de gestion des profiles utilisateurs
 router.get("/admin/profile", ctrlToken, userController.getAllUsers);
-router.get("/profile", ctrlToken, userController.getUserProfile);
+router.get("/profile", ctrlToken, userController.getUser);
 router.put("/editProfile", ctrlToken, multer, userController.editProfile);
 router.put("/updatePwd", ctrlToken, changePassword, userController.updatePwd);
 router.delete("/deleteProfile", ctrlToken, userController.deleteProfile);

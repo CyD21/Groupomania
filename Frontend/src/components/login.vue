@@ -1,29 +1,23 @@
 <template>
-  <div class="container bg-primary mt-5 col-xl-4 col-md-6 col-10 p-0 d-flex d-flex flex-column rounded shadow-lg">
+  <div class="container bg-firstColor mt-5 col-xl-4 col-md-6 col-10 p-0 d-flex d-flex flex-column rounded shadow-lg">
     <div class="align-self-center rounded-top">
-      <img class="img-fluid px-4" src="../assets/images/logo.png" alt="logo" />
+      <Logo />
     </div>
     <div class="p-4 bg-light">
       <div>
-        <form>
+        <form @submit.prevent="UserLogin">
           <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Saissisez votre adresse email</label>
-            <input type="email" class="form-control" id="exampleInputEmail1"/>
+            <label for="email" class="form-label">Saissisez votre adresse email</label>
+            <input type="email" class="form-control" v-model="email" id="email" />
           </div>
           <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">Entrez votre mot de passe</label>
-            <input type="password" class="form-control" id="exampleInputPassword1" />
-          </div>
-          <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">Confirmer votre mot de passe</label>
-            <input type="password" class="form-control" id="exampleInputPassword1" />
-          </div>
-          <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" id="exampleCheck1" />
-            <label class="form-check-label" for="exampleCheck1">Se souvenir de moi</label>
+            <label for="password" class="form-label">Entrez votre mot de passe</label>
+            <input type="password" class="form-control" v-model="password" id="password" />
           </div>
           <div class="text-center">
-            <button type="submit" class="btn btn-primary px-xl-5 text-white">Valider</button>
+            <button type="submit" class="btn btn-thirdColor px-xl-5 text-white">
+              Valider
+            </button>
           </div>
         </form>
       </div>
@@ -34,7 +28,30 @@
     </div>
   </div>
 </template>
-<script></script>
+<script>
+import axios from "axios";
+import Logo from "./logo.vue";
+export default {
+  name: "Login",
+  data() {
+    return {
+      email: "",
+      password: "",
+    }
+  },
+  methods: {
+    async UserLogin() {
+      const response = await axios.post("user/login", {
+        email: this.email,
+        password: this.password,
+      });
+      localStorage.setItem("TOKEN", response.data.TOKEN);
+      this.$router.push("/home");
+    },
+  },
+  components: { Logo } 
+};
+</script>
 
 <style>
 </style>
