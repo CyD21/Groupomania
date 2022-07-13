@@ -15,12 +15,12 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav text-white">
           <li class="nav-item">
-            <router-link to="/home" class="nav-link text-white active" aria-current="page" href="#">
-              Accueil
+            <router-link to="/home" class="nav-link text-white active" aria-current="Accueil">
+              <i class="fa-solid fa-house"></i>
             </router-link>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-white" href="#">Votre compte</a>
+            <a class="nav-link text-white"><i class="fa-solid fa-user"></i></a>
           </li>
           <li v-if="!user">
             <router-link to="/login" class="nav-link text-white">

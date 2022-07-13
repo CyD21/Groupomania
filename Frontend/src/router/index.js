@@ -7,7 +7,7 @@ import home from "@/views/HomePage.vue";
 const routes = [
   {
     path: "/",
-    name: "accueil",
+    name: "Accueil",
     component: login,
   },
   {
