@@ -30,7 +30,7 @@ const addUser = (req, res) => {
           password,
         };
         const user = User.create(dataUser);
-        const message = `Bonjour ${firstName}, Votre compte a été créer avec succés`;
+        const message = `Bonjour ${dataUser.firstName}, Votre compte a été créer avec succés`;
         res.status(200).json({ message });
       }
     })
@@ -45,8 +45,8 @@ const addUser = (req, res) => {
 //============================================================================
 
 const login = async (req, res) => {
-  var email = req.body.email;
-  var password = req.body.password;
+  const email = req.body.email;
+  const password = req.body.password;
   User.findOne({ where: { email: email } })
     .then((user) => {
       if (user) {
@@ -98,7 +98,7 @@ const getAllUsers = async (req, res) => {
 };
 
 //============================================================================
-// * RECUPERATION PROFILE UTILISATEUR (GET)                       /api/profile
+// * RECUPERATION PROFILE UTILISATEUR (GET)                       /user/profile
 //============================================================================
 
 const getUser = async (req, res) => {
@@ -124,7 +124,8 @@ const getUser = async (req, res) => {
 //============================================================================
 const editProfile = async (req, res) => {
   const userToken = req.userToken;
-  const name = req.body.name;
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
   const email = req.body.email;
   const occupation = req.body.occupation;
   const profilePicture = req.file.filename;

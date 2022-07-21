@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img class="img-fluid px-4" src="../assets/images/logo.png" alt="logo" />
+    <img class="img-fluid px-4" src="../assets/images/logo.png" alt="Groupomania" />
   </div>
 </template>
 <script>

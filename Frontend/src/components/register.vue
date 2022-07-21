@@ -17,7 +17,9 @@
           <div class="mb-3">
             <label for="email" class="form-label">Votre adresse email</label>
             <input type="email" class="form-control" v-model="dataUser.email" id="email" aria-describedby="emailHelp" />
-            <div id="emailHelp" class="form-text">Nous ne partagerons jamais votre e-mail.</div>
+            <div id="emailHelp" class="form-text">
+              Nous ne partagerons jamais votre e-mail.
+            </div>
           </div>
           <div class="mb-3">
             <label for="password" class="form-label">Votre mot de passe</label>
@@ -54,19 +56,37 @@ export default {
     };
   },
   methods: {
-    async UserSubmit() {
-      try {
-        await axios.post("user/add", {
-          firstName: this.dataUser.emailfirstName,
+    UserSubmit() {
+      axios
+        .post("user/add", {
+          firstName: this.dataUser.firstName,
           lastName: this.dataUser.lastName,
           email: this.dataUser.email,
           password: this.dataUser.password,
+        })
+        .then((user) => {
+          this.UserLogin(this.dataUser.email, this.dataUser.password)
+          this.$router.push("/login");
+        })
+        .catch((error) => {
+          this.error = "Enregistrement refusé, veuillez contrôler vos données";
         });
-        this.$router.push("/login");
-      } catch (error) {
-          this.error = "Enregistrement refusé, veuillez contrôler vos données"
-      }
-
+    },
+    UserLogin(email, password) {
+      axios
+        .post("user/login", {
+          email: email,
+          password: password,
+        })
+        .then((res) => {
+          localStorage.setItem("token", res.data.TOKEN);
+          this.$store.dispatch("user", res.data.user);
+          this.$router.push("/home");
+        })
+        .catch((error) => {
+          this.error =
+            "Erreur de connexion, veuillez vérifier les informations";
+        });
     },
   },
 };
