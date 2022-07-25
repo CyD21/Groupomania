@@ -18,7 +18,7 @@ const addPost = (req, res) => {
   const userToken = req.userToken;
   const description = req.body.description;
   const author = User.name
-  const image = req.file.filename;
+  const image = `${req.protocol}://${req.get("host")}/public/images/${req.file.filename}`;
   if (description === "") {
     res.status(404).json({ message: "La description est obligatoire" });
   }

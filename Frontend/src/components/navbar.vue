@@ -20,11 +20,13 @@
             </router-link>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-white">
-              <button class="btn bg-light px-3 me-3 text-thirdColor" title="Votre profil">
-                <i class="fa-solid fa-user"></i>
-              </button>
-            </a>
+            <router-link to="/profile">
+              <a class="nav-link text-white">
+                <button class="btn bg-light px-3 me-3 text-thirdColor" title="Votre profil">
+                  <i class="fa-solid fa-user"></i>
+                </button>
+              </a>
+            </router-link>
           </li>
           <li v-if="!user">
             <router-link to="/login" class="nav-link text-white">
@@ -34,12 +36,12 @@
             </router-link>
           </li>
           <li v-if="user">
-            <a href="javascript:void(0)" @click="logOut" class="nav-link text-white">
-              <button class="btn bg-light px-3 me-3 text-thirdColor" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Se déconnecter">
+            <a href="javascript:void(0)" @click="logOut" class="nav-link text-white" title="Se déconnecter">
+              <button class="btn bg-light px-3 me-3 text-thirdColor" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                title="Se déconnecter">
                 <i class="fa fa-unlock" aria-hidden="true"></i>
               </button>
             </a>
-            {{ user.username }}
           </li>
           <li>
             <router-link v-if="!user" to="/register" class="nav-link text-white" title="S'enregistrer">
@@ -65,8 +67,8 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["user"])
-  }
+    ...mapGetters(["user"]),
+  },
 };
 </script>
 <style>

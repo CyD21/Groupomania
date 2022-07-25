@@ -29,7 +29,7 @@
             </button>
           </div>
         </form>
-        <div class="alert alert-danger mt-3" v-if="error">{{ error }}</div>
+        <div class="alert alert-danger mt-3 text-center" v-if="error">{{ error }}</div>
       </div>
     </div>
     <div class="bg-light text-center py-3 m-0 rounded-bottom">
@@ -63,8 +63,7 @@ export default {
           this.$router.push("/home");
         })
         .catch((error) => {
-          this.error =
-            "Erreur de connexion, veuillez vérifier les informations";
+          this.error = error.response.data.message;
         });
     },
   },

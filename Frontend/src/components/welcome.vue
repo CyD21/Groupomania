@@ -1,17 +1,23 @@
 <template>
-  <div class="card mb-3 col-11 col-xl-6 mx-auto mt-3 px-2 px-md-0 bg-thirdColor text-white fw-lighter">
+  <div class="card mb-3 col-11 col-xl-6 mx-auto mt-3 px-2 px-md-0 bg-thirdColor text-white fw-lighter shadow">
     <div class="row g-0">
       <div class="col-md-3 d-flex justify-content-center justify-content-xl-start align-items-center">
-        <img src="../assets/images/defaultprofile.jpg" class="img-fluid rounded mt-3 mt-md-0 p-md-2 p-xl-0" alt="..." />
+        <img
+          crossorigin="anonymous"
+          :src="user.profilePicture"
+          class="img-fluid rounded mt-3 mt-md-0 p-md-2 p-xl-0"
+          alt="..."
+        />
       </div>
       <div class="col-md-9 d-flex justify-content-center align-items-center">
         <div class="card-body p-md-0 ms-md-2">
           <div class="card-title" v-if="user">
             Bonjour, <strong>{{ user.firstName }}</strong> bienvenue sur votre
-            réseau Groupomania.
+            profil Groupomania.
+            {{ user.profilePicture }}
           </div>
           <div class="card-title" v-if="!user">
-            Bonjour, Merci de bien vouloir vous connecter pour accéder au réseau
+            Bonjour, Merci de bien vouloir vous connecter pour accéder à votre profil.
           </div>
           <p class="card-text">
             Vous pouvez maintenant partager vos idées, vos envies, avec

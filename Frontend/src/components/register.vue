@@ -30,7 +30,7 @@
               Valider
             </button>
           </div>
-          <div v-if="error" class="alert alert-danger mt-3">{{ error }}</div>
+          <div v-if="error" class="alert alert-danger mt-3 text-center">{{ error }}</div>
         </form>
       </div>
     </div>
@@ -66,10 +66,9 @@ export default {
         })
         .then((user) => {
           this.UserLogin(this.dataUser.email, this.dataUser.password)
-          this.$router.push("/login");
         })
         .catch((error) => {
-          this.error = "Enregistrement refusé, veuillez contrôler vos données";
+          this.error = error.response.data.message;
         });
     },
     UserLogin(email, password) {
@@ -81,7 +80,7 @@ export default {
         .then((res) => {
           localStorage.setItem("token", res.data.TOKEN);
           this.$store.dispatch("user", res.data.user);
-          this.$router.push("/home");
+          this.$router.push("/profile");
         })
         .catch((error) => {
           this.error =

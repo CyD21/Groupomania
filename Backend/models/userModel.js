@@ -24,7 +24,6 @@ module.exports = (sequelize, DataTypes) => {
         },
         profilePicture: {
             type: DataTypes.STRING,
-            defaultValue: "http://localhost:3000/public/profile/defaultprofile.jpg",
             allowNull: true,
         },
         isAdmin: {

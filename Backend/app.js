@@ -11,11 +11,11 @@ const app = express();
 dotenv.config();
 
 var corOptions = {
-  original: "http://localhost:8080",
+  original: "https://localhost:8080",
 };
 
 // Importation des middlewares serveur
-app.use(helmet.contentSecurityPolicy({useDefaults: false,}));
+app.use(helmet());
 app.use(cors(corOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
