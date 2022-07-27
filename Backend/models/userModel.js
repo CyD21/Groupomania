@@ -27,8 +27,8 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true,
         },
         isAdmin: {
-            type: DataTypes.ENUM("admin", "moderator", "user"),
-            defaultValue: "user"
+            type: DataTypes.ENUM("Administrateur","Modérateur","Utilisateur"),
+            defaultValue: "Utilisateur"
         },
 
     }, {

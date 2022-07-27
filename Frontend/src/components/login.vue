@@ -1,5 +1,5 @@
 <template>
-  <div class="container bg-firstColor mt-5 col-xl-4 col-md-6 col-10 p-0 d-flex d-flex flex-column rounded shadow-lg">
+  <div class="container bg-firstColor mt-5 col-xl-3 col-md-6 col-10 p-0 d-flex d-flex flex-column rounded shadow-lg">
     <div class="align-self-center rounded-top m-0 m-md-0">
       <Logo />
     </div>

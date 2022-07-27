@@ -2,7 +2,9 @@
   <nav class="navbar navbar-expand-lg bg-firstColor">
     <div class="container-fluid">
       <a class="navbar-brand col-8">
-        <Logo />
+        <router-link to="/home">
+          <Logo />
+        </router-link>
       </a>
       <button class="navbar-toggler fs-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,6 +34,14 @@
             <router-link to="/login" class="nav-link text-white">
               <button class="btn bg-light px-3 me-3 text-thirdColor" title="Se connecter">
                 <i class="fa-solid fa-arrow-right-to-bracket"></i>
+              </button>
+            </router-link>
+          </li>
+          <!--?Administration -->
+          <li>
+            <router-link to="/admin" class="nav-link text-white">
+              <button class="btn bg-light px-3 me-3 text-thirdColor" title="Administration">
+                <i class="fa-solid fa-screwdriver-wrench"></i>
               </button>
             </router-link>
           </li>

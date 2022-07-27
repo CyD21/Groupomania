@@ -1,25 +1,25 @@
 <template>
   <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
     <li class="nav-item" role="presentation">
-      <button class="nav-link active" id="pills-profil-tab" data-bs-toggle="pill" data-bs-target="#pills-profil"
+      <button class="btn btn-thirdColor m-1" id="pills-profil-tab" data-bs-toggle="pill" data-bs-target="#pills-profil"
         type="button" role="tab" aria-controls="pills-profil" aria-selected="true">
         Profil
       </button>
     </li>
     <li class="nav-item" role="presentation">
-      <button class="nav-link" id="pills-edit-tab" data-bs-toggle="pill" data-bs-target="#pills-edit" type="button"
+      <button class="btn btn-thirdColor m-1" id="pills-edit-tab" data-bs-toggle="pill" data-bs-target="#pills-edit" type="button"
         role="tab" aria-controls="pills-edit" aria-selected="false">
         Modifier
       </button>
     </li>
     <li class="nav-item" role="presentation">
-      <button class="nav-link" id="pills-password-tab" data-bs-toggle="pill" data-bs-target="#pills-password" type="button"
+      <button class="btn btn-thirdColor m-1" id="pills-password-tab" data-bs-toggle="pill" data-bs-target="#pills-password" type="button"
         role="tab" aria-controls="pills-password" aria-selected="false">
         Mot de passe
       </button>
     </li>
     <li class="nav-item" role="presentation">
-      <button class="nav-link" id="pills-delete-tab" data-bs-toggle="pill" data-bs-target="#pills-delete" type="button"
+      <button class="btn btn-thirdColor m-1" id="pills-delete-tab" data-bs-toggle="pill" data-bs-target="#pills-delete" type="button"
         role="tab" aria-controls="pills-delete" aria-selected="false">
         supprimer
       </button>
@@ -43,23 +43,24 @@
       <editProfile />
     </div>
     <div class="tab-pane fade" id="pills-password" role="tabpanel" aria-labelledby="pills-password-tab">
-      ici modification du mot de passe
+      <UpdatePassword />
     </div>
     <div class="tab-pane fade" id="pills-delete" role="tabpanel" aria-labelledby="pills-delete-tab">
-      ici suppression du profil
+      <deleteAccount />
     </div>
   </div>
 </template>
 <script>
 import { mapGetters } from "vuex";
 import editProfile from "./editProfile.vue"
-
+import UpdatePassword from "./updatePassword.vue"
+import deleteAccount from "./deleteAccount.vue";
 export default {
   name: "userProfile",
-  components: { editProfile },
   computed: {
     ...mapGetters(["user"]),
   },
+  components: { editProfile, UpdatePassword, deleteAccount },
 };
 </script>
 <style>

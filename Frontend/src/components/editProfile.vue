@@ -1,9 +1,9 @@
 <template>
   <form @submit.prevent="profilSubmit">
     <div class="input-group mb-3">
-      <span class="input-group-text"
-        ><i class="fa fa-user" aria-hidden="true"></i
-      ></span>
+      <span class="input-group-text">
+        <i class="fa fa-user" aria-hidden="true"></i>
+      </span>
       <input
         v-model="user.firstName"
         :placeholder="user.firstName"
@@ -20,23 +20,22 @@
       />
     </div>
     <div class="input-group mb-3">
-      <span class="input-group-text" id="basic-addon1"
-        ><i class="fa fa-envelope" aria-hidden="true"></i
-      ></span>
+      <span class="input-group-text" id="basic-addon1">
+        <i class="fa fa-envelope" aria-hidden="true"></i>
+      </span>
       <input
         v-model="user.email"
         :placeholder="user.email"
         type="email"
         class="form-control"
-        placeholder="Votre adresse email"
         aria-label="email"
         aria-describedby="basic-addon1"
       />
     </div>
     <div class="input-group mb-3">
-      <span class="input-group-text" id="basic-addon1"
-        ><i class="fa fa-people-group" aria-hidden="true"></i
-      ></span>
+      <span class="input-group-text" id="basic-addon1">
+        <i class="fa fa-people-group" aria-hidden="true"></i>
+      </span>
       <input
         v-model="user.occupation"
         :placeholder="user.occupation"
@@ -48,10 +47,12 @@
     </div>
     <div class="input-group mb-3">
       <input
-        @change="uploadImage"
-        :placeholder="user.profilePicture"
+        @change="selectFile"
+        id="pictureProfile"
         type="file"
         ref="file"
+        name="file"
+        accept=".jpg, .jpeg, .png"
         class="form-control"
       />
     </div>
@@ -84,25 +85,38 @@ export default {
   },
   methods: {
     profilSubmit() {
+      const formData = new FormData();
+      formData.append("profilePicture", this.$refs.file.files[0]);
       axios
-        .put("user/editProfile", {
+        .put("user/editProfile", formData, {
           firstName: this.user.firstName,
           lastName: this.user.lastName,
           email: this.user.email,
           occupation: this.user.occupation,
-          profilePicture: this.user.profilePicture,
         })
-        .then((msg) => {
+        .then(() => {
           this.msg = "La modification de vos informations est prise en compte";
         })
         .catch((error) => {
-          this.error = "error.response.data.message";
+          this.error = error.response.data.message;
         });
     },
-    uploadImage() {
+    selectFile(e) {
       const file = this.$refs.file.files[0];
       this.file = file;
-      console.log(this.file);
+      console.log(this.file.name);
+      //
+      let input = e.target;
+      if (input.files) {
+        let reader = new FileReader();
+        console.log("reader", reader);
+        reader.onload = (e) => {
+          console.log("  reader.onload", reader);
+          this.profilePicture = e.target.result;
+          console.log("this.profilePicture", this.profilePicture);
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
     },
   },
 };

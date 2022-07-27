@@ -3,6 +3,15 @@ $theme-colors: (
   "secondColor": #ffd7d7,
   "thirdColor": #4e5166,
 );
+.imgProfil {
+  max-height: 150px;
+}
+.imgPosts {
+  width: 100%;
+  max-height: 100px;
+  object-fit: cover;
+  object-position: center;
+}
 
 .slide-fade-enter-active {
   transition: all 0.2s ease;

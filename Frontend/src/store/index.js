@@ -10,14 +10,14 @@ const store = createStore({
       return state.user;
     },
   },
-  actions: {
-    user(context, user) {
-      context.commit("user", user);
-    },
-  },
   mutations: {
     user(state, user) {
       state.user = user;
+    },
+  },
+  actions: {
+    user(context, user) {
+      context.commit("user", user);
     },
   },
 });

@@ -8,7 +8,7 @@ module.exports = (req, res, next) => {
     let userId = ctrlToken.getUserId(headersAuth)
     req.userToken = ctrlToken.getUserId(headersAuth)
     if (userId < 0) {
-      const message = "Le token est invalide"
+      const message = "Votre session a expirée veuillez vous reconnecter"
       res.status(404).json({message})
     } else {
       next()

@@ -7,7 +7,7 @@
   </div>
   <div class="container p-0 col-xl-6 bg-light mx-auto mt-4 rounded shadow">
     <div class="bg-firstColor text-white ps-4 py-2 fs-4 rounded-top">
-      Vos informations
+      Gestion de votre compte
     </div>
     <div class="p-4">
       <userProfile />

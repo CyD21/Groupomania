@@ -1,5 +1,5 @@
 <template>
-  <div class="container bg-firstColor mt-5 col-xl-4 col-md-6 col-10 p-0 d-flex d-flex flex-column rounded shadow-lg">
+  <div class="container bg-firstColor mt-5 col-xl-3 col-md-6 col-10 p-0 d-flex d-flex flex-column rounded shadow-lg">
     <div class="align-self-center rounded-top">
       <img class="img-fluid px-4" src="../assets/images/logo.png" alt="logo" />
     </div>
@@ -64,7 +64,7 @@ export default {
           email: this.dataUser.email,
           password: this.dataUser.password,
         })
-        .then((user) => {
+        .then(() => {
           this.UserLogin(this.dataUser.email, this.dataUser.password)
         })
         .catch((error) => {
@@ -80,11 +80,10 @@ export default {
         .then((res) => {
           localStorage.setItem("token", res.data.TOKEN);
           this.$store.dispatch("user", res.data.user);
-          this.$router.push("/profile");
+          this.$router.push("/home");
         })
         .catch((error) => {
-          this.error =
-            "Erreur de connexion, veuillez vérifier les informations";
+          this.error = error.response.data.message;
         });
     },
   },

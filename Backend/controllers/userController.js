@@ -18,26 +18,31 @@ const addUser = (req, res) => {
   const lastName = req.body.lastName
   const email = req.body.email;
   const password = req.body.password;
-  User.findOne({ where: { email: email } })
-    .then((userFounded) => {
-      if (userFounded) {
-        res.status(400).json({ message: "Cette adresse email existe déjà !" });
-      } else {
-        let dataUser = {
-          firstName,
-          lastName,
-          email,
-          password,
-        };
-        const user = User.create(dataUser);
-        const message = `Bonjour ${dataUser.firstName}, Votre compte a été créer avec succés`;
-        res.status(200).json({ message });
-      }
-    })
-    .catch((error) => {
-      const message = "Impossible de créer cette utilisateur";
-      res.status(500).json({ message });
-    });
+  if (firstName === "" && lastName === ""){
+    const message = "Vous devez entrez un nom et un prénom"
+    res.status(400).json({ message })
+  } else {
+    User.findOne({ where: { email: email } })
+      .then((userFounded) => {
+        if (userFounded) {
+          res.status(400).json({ message: "Cette adresse email existe déjà !" });
+        } else {
+          let dataUser = {
+            firstName,
+            lastName,
+            email,
+            password,
+          };
+          const user = User.create(dataUser);
+          const message = `Bonjour ${dataUser.firstName}, Votre compte a été créer avec succés`;
+          res.status(200).json({ message });
+        }
+      })
+      .catch((error) => {
+        const message = "Impossible de créer cette utilisateur";
+        res.status(500).json({ message });
+      });
+  }
 };
 
 //============================================================================
@@ -57,9 +62,7 @@ const login = async (req, res) => {
               TOKEN: jwtUtils.generateTokenForUser(user),
             });
           } else {
-            res
-              .status(401)
-              .json({ message: "Votre mot de passe est incorrect" });
+            res.status(401).json({ message: "Votre mot de passe est incorrect" });
           }
         });
       } else {
@@ -80,7 +83,7 @@ const getAllUsers = async (req, res) => {
   const Admin = req.params.isAdmin;
   User.findOne({ attributes: ["isAdmin"], where: { id: userToken } })
   .then((user) => {
-    if (Admin == "admin") {
+    if (Admin == "Administrateur") {
       User.findAll({ attributes: ["id", "firstName", "lastName", "email", "occupation", "pictureProfile", "isAdmin"] })
         .then((user) => {
           const message = "La liste des utilisateurs a bien été récupérer";
@@ -128,7 +131,7 @@ const editProfile = async (req, res) => {
   const lastName = req.body.lastName;
   const email = req.body.email;
   const occupation = req.body.occupation;
-  const profilePicture = `${req.protocol}://${req.get("host")}/public/profile/${req.file.filename}`;
+  const profilePicture = `${req.protocol}://${req.get("host")}/public/profile/${req.body.profilePicture}`;
   User.findOne({
     attributes: ["id", "firstName", "lastName", "email", "occupation", "profilePicture"],
     where: { id: userToken },
@@ -140,7 +143,7 @@ const editProfile = async (req, res) => {
         lastName: lastName,
         email: email,
         occupation: occupation,
-        profilePicture: profilePicture
+        profilePicture: profilePicture,
       })
           .then((userUpdate) => {
             const message = `Le compte de ${user.email} à bien été mise à jour`;
@@ -161,7 +164,7 @@ const editProfile = async (req, res) => {
 };
 
 //============================================================================
-// * MISE A JOUR MOT DE PASSE UTILISATEUR (PUT)              /api/updatePwd/id
+// * MISE A JOUR MOT DE PASSE UTILISATEUR (PUT)                 /api/updatePwd
 //============================================================================
 
 const updatePwd = (req, res) => {
@@ -174,7 +177,7 @@ const updatePwd = (req, res) => {
     res.status(401).json({ message: "Tous les champs sont requis" });
   }
   if (newPassword !== confirmPassword) {
-    res.status(401).json({ message: "Echec de confirmation du mot de passe"})
+    res.status(401).json({ message: "La confirmation du mot de passe a échoué"})
   }
   if (confirmPassword == newPassword && oldPassword !== newPassword) {
     User.findOne({ where: { id: userToken } })
@@ -186,11 +189,11 @@ const updatePwd = (req, res) => {
             .then((userPwdEdit) => {
               res.status(200).json({ message: "Mot de passe mise à jour" });
             })
-            // .catch((error) => {
-            //   const message = "Echec de la mise à jour du mot de passe"
-            //   res.status(400).json({ message, data:error }) });
+            .catch((error) => {
+              const message = "Echec de la mise à jour du mot de passe"
+              res.status(400).json({ message, data:error }) });
             } else {
-            const message = "Echec de la mise à jour du mot de passe";
+            const message = "Votre ancien mot de passe n'est pas valide";
             res.status(401).json({ message });
             }
       });
@@ -212,7 +215,7 @@ const deleteProfile = async (req, res) => {
   const userToken = req.userToken;
   User.findByPk(userToken)
     .then((user) => {
-      if (user.isAdmin === "admin") {
+      if ( userToken  || user.isAdmin === "Administateur") {
         User.findByPk(userToken)
           .then((user) => {
             if (user === null) {
@@ -220,11 +223,11 @@ const deleteProfile = async (req, res) => {
               return res.status(404).json({ message });
             }
             fs.unlink("./public/profile/" + user.profilePicture, (err) => {
-              if (err) res.status(500).send({ message: err });
+              // if (err) res.status(500).send({ message: err });
               const userDeleted = user;
               return User.destroy({ where: { id: user.id } }).then((_) => {
               const message = `L'utilisateur avec l'identifiant n°${userDeleted.id} a bien été supprimé.`;
-              res.status(200).json({ message, data: user.id });
+              res.status(200).json({ message });
             })})
           })
           .catch((error) => {
@@ -238,7 +241,8 @@ const deleteProfile = async (req, res) => {
       }
     })
     .catch((error) => {
-      res.status(500).json({ error });
+      const message = "Impossible de supprimer le compte utilisateur"
+      res.status(500).json({ message, data:error });
     });
 };
 
