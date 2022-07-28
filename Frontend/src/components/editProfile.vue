@@ -73,7 +73,7 @@
 import axios from "axios";
 import { mapGetters } from "vuex";
 export default {
-  name: "editProfil",
+  name: "editProfilUser",
   data() {
     return {
       error: "",
@@ -102,10 +102,10 @@ export default {
         });
     },
     selectFile(e) {
-      const file = this.$refs.file.files[0];
-      this.file = file;
-      console.log(this.file.name);
-      //
+      // const file = this.$refs.file.files[0];
+      // this.file = file;
+      // console.log(this.file.name);
+      // //
       let input = e.target;
       if (input.files) {
         let reader = new FileReader();

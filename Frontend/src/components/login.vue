@@ -42,7 +42,7 @@
 import axios from "axios";
 import Logo from "./logo.vue";
 export default {
-  name: "Login",
+  name: "LoginUser",
   data() {
     return {
       email: "",
@@ -60,7 +60,8 @@ export default {
         .then((res) => {
           localStorage.setItem("token", res.data.TOKEN);
           this.$store.dispatch("user", res.data.user);
-          this.$router.push("/home");
+          console.log(res.data.user);
+          this.$router.push("/profile");
         })
         .catch((error) => {
           this.error = error.response.data.message;

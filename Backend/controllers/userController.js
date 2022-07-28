@@ -131,7 +131,7 @@ const editProfile = async (req, res) => {
   const lastName = req.body.lastName;
   const email = req.body.email;
   const occupation = req.body.occupation;
-  const profilePicture = `${req.protocol}://${req.get("host")}/public/profile/${req.body.profilePicture}`;
+  const profilePicture = `${req.protocol}://${req.get("host")}/public/profile/${req.file.filename}`;
   User.findOne({
     attributes: ["id", "firstName", "lastName", "email", "occupation", "profilePicture"],
     where: { id: userToken },
@@ -151,7 +151,7 @@ const editProfile = async (req, res) => {
           })
           .catch((error) => {
             const message = `Echec de la mise à jour du compte ${user.email}`;
-            res.status(400).send({ message, data:error });
+            res.status(400).json({ message, data:error });
           })
       } else {
         res.status(404).json({ message: "Cette utilisateur n'existe pas" });

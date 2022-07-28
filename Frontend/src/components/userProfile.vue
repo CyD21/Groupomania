@@ -56,7 +56,7 @@ import editProfile from "./editProfile.vue"
 import UpdatePassword from "./updatePassword.vue"
 import deleteAccount from "./deleteAccount.vue";
 export default {
-  name: "userProfile",
+  name: "ProfileUser",
   computed: {
     ...mapGetters(["user"]),
   },

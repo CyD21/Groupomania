@@ -71,7 +71,11 @@ db.comments.belongsTo(db.posts);
 
 db.sequelize.sync({ force: false })
     .then(() => {
-        console.log('Base de données synchronisées')
+        console.log("Base de données synchronisées")
+    })
+    .catch((error) => {
+        const errorMessage = "Echec de connexion à la base de données ======> " + error.message
+        console.log(errorMessage)        
     })
 
 

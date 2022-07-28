@@ -50,7 +50,7 @@
 import axios from "axios";
 import { mapGetters } from "vuex";
 export default {
-  name: "deleteAccount",
+  name: "deleteAccountUser",
   data() {
     return {};
   },

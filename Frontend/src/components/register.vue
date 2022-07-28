@@ -43,7 +43,7 @@
 <script>
 import axios from "axios";
 export default {
-  name: "Register",
+  name: "registerUser",
   data() {
     return {
       dataUser: {

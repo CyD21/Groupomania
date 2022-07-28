@@ -20,7 +20,7 @@ import Navbar from "./navbar.vue";
 import Welcome from "./welcome.vue";
 import userProfile from "./userProfile.vue";
 export default {
-  name: "Home",
+  name: "profilUser",
   components: { Navbar, Welcome, userProfile },
   async mounted() {
     const response = await axios.get("user/profile");

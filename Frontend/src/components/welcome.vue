@@ -2,7 +2,7 @@
   <div class="card mb-3 col-11 col-xl-6 col-md-10 mx-auto mt-3 px-2 px-md-0 bg-thirdColor text-white fw-lighter shadow">
     <div class="row g-0">
       <div class="col-md-3 d-flex justify-content-center justify-content-xl-start align-items-center">
-        <img crossorigin="anonymous" src="../assets/images/profilePicture_1658500112453.jpeg" class="img-thumbnail rounded mt-3 mt-md-0 p-md-2 p-xl-0 imgProfil" alt="..." />
+        <img crossorigin="anonymous" :src="user.profilePicture" class="img-thumbnail rounded mt-3 mt-md-0 p-md-2 p-xl-0 imgProfil" alt="..." />
       </div>
       <div class="col-md-9 d-flex justify-content-center align-items-center">
         <div class="card-body p-md-0 ms-md-2">
@@ -23,7 +23,7 @@
 import axios from "axios";
 import { mapGetters } from "vuex";
 export default {
-  name: "Welcome",
+  name: "WelcomeUser",
   computed: {
     ...mapGetters(["user"]),
   },

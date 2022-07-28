@@ -12,7 +12,7 @@ import { mapGetters } from "vuex";
 import Navbar from "./navbar.vue";
 import Posts from "./posts/posts.vue";
 export default {
-  name: "Home",
+  name: "HomePage",
   components: { Navbar, Posts },
   computed: {
     ...mapGetters(["user"]),

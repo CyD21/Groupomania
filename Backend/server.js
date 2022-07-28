@@ -32,7 +32,8 @@ const commentRouter = require("./routes/commentRouter");
 const likeRouter = require("./routes/likeRouter");
 
 app
-  .use("public", express.static(path.join(__dirname, 'image')))
+  .use("public/images", express.static(path.join(__dirname, 'image')))
+  .use("/public/profile", express.static(path.join(__dirname, 'public/profile')))
   .use("/api/user", userRouter)
   .use("/api/post", postRouter)
   .use("/api/comment", commentRouter)
