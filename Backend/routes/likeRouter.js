@@ -10,6 +10,7 @@ const router = express.Router();
 //Création des routes
 router.get('/getLike/:postId', ctrlToken, likeController.getLikeBypostUser);
 router.get('/gestionLike/:postId', ctrlToken, likeController.gestionLike);
+router.get('/getAllLikes', ctrlToken, likeController.getAllLikes);
 
 
 //Exportation du routeur de l'utilisateur
