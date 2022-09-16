@@ -11,13 +11,15 @@ const Post = db.posts;
 //============================================================================
 const getAllLikes = (req , res) => {
   const userToken = req.userToken;
-  Like.findAll()
-    .then((likes) => {
-      res.status(200).json(likes)
-    })
-    .catch((err) => {
-      res.status(400).json({ message: "impossible de récupérer les likes pour le moment" });
-    });
+  if(userToken) {
+    Like.findAll()
+      .then((likes) => {
+        res.status(200).json(likes)
+      })
+      .catch((err) => {
+        res.status(400).json({ message: "impossible de récupérer les likes pour le moment" });
+      });
+    }
 }
 
 //============================================================================
