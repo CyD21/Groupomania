@@ -1,0 +1,113 @@
+$theme-colors: (
+  "firstColor": #fd2d01,
+  "secondColor": #ffd7d7,
+  "thirdColor": #4e5166,
+);
+
+$spinner-width: 1px;
+$spinner-height: $spinner-width;
+$spinner-vertical-align: -.125em;
+$spinner-border-width: .25em;
+$spinner-animation-speed: 1s;
+
+$spinner-width-sm: 0.3rem;
+$spinner-height-sm: $spinner-width-sm;
+$spinner-border-width-sm: .2em;
+
+.imgProfil {
+  min-width: 200px;
+  max-height: 200px;
+  object-fit: cover;
+  object-position: center;
+}
+.imgProfilAdmin {
+  height: 220px;
+  max-width: 220px;
+  object-fit: cover;
+  object-position: center;
+}
+.imgListAdmin {
+  height: 50px;
+  max-width: 50px;
+  object-fit: cover;
+  object-position: center;
+}
+.imgPosts {
+  width: 100%;
+  max-height: 100px;
+  object-fit: cover;
+  object-position: center;
+}
+
+.imgEditPost {
+  min-width: 40px;
+  max-width: 80px;
+  min-width: 40px;
+  max-height: 80px;
+  object-fit: cover;
+  object-position: center;
+}
+.imgPostModal {
+  max-width: 100%;
+  max-height: 600px;
+}
+
+.imgProfilPosts {
+  height: 60px;
+  max-width: 60px;
+  object-fit: cover;
+  object-position: center;
+
+}
+
+.icoColorsRed {
+  color: red;
+}
+
+.icoColorsGreen {
+  color: green;
+}
+
+// *=============== STYLES DE LA MODAL =====================
+
+.myModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 1;
+}
+
+// *=============== TRANSITIONS =============================
+// Pour toutes les pages ====================================
+.slide-fade-enter-active {
+  transition: all 0.2s ease;
+}
+.slide-fade-leave-active {
+  transition: all 0.5s cubic-bezier(.17, .67, .83, .67);
+}
+.slide-fade-enter,
+.slide-fade-leave-to {
+  opacity: 0;
+}
+
+
+// *=============== ANIMATIONS =============================
+.scale-up-center {
+	animation: scale-up-center 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+}
+
+@keyframes scale-up-center {
+  0% {
+    transform: scale(0.5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@import "../../../node_modules/bootstrap/scss/bootstrap.scss";
