@@ -7,6 +7,22 @@ const Like = db.likes;
 const Post = db.posts;
 
 //============================================================================
+// * fonction pour la récupération de tout les likes                         
+//============================================================================
+const getAllLikes = (req , res) => {
+  const userToken = req.userToken;
+  if(userToken) {
+    Like.findAll()
+      .then((likes) => {
+        res.status(200).json(likes)
+      })
+      .catch((err) => {
+        res.status(400).json({ message: "impossible de récupérer les likes pour le moment" });
+      });
+    }
+}
+
+//============================================================================
 // * fonction pour l'ajout d'un like                         
 //============================================================================
 const createLike = (id, userToken) => {
@@ -93,4 +109,5 @@ const gestionLike = (req, res) => {
 module.exports = {
   gestionLike,
   getLikeBypostUser,
+  getAllLikes
 };
